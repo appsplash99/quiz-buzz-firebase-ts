@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 
@@ -39,6 +40,10 @@ function App() {
           </a>
         </p>
         <div className="bg-blue-400 text-white p-20 ">With Tailwind CSS</div>
+        <Routes>
+          <Route path="/" element={<>Cool</>} />
+          <Route path="/wish" element={<>Wish</>} />
+        </Routes>
       </header>
     </div>
   );
