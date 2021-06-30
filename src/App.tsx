@@ -1,52 +1,35 @@
-import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import { Route, Routes } from 'react-router';
+import { Home } from './pages/Home';
+import { QuizCategories } from './pages/QuizCategories';
+import { PlayQuizSet } from './pages/PlayQuizSet';
+import { QuizStarter } from './pages/QuizStarter';
+import { QuizBuzzNav } from './components/QuizBuzzNav';
 
-function App() {
-  const [count, setCount] = useState(0);
-
+export const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button
-            type="button"
-            onClick={() => setCount((count) => count + 1)}
-            className="bg-pink-50 text-black px-4">
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer">
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer">
-            Vite Docs
-          </a>
-        </p>
-        <div className="bg-blue-400 text-white p-20 ">With Tailwind CSS</div>
+    <div className="flex flex--column align-items--c">
+      <QuizBuzzNav />
+      <div className="quiz-app__body p--lg">
         <Routes>
-          <Route path="/" element={<>Cool</>} />
-          <Route path="/wish" element={<>Wish</>} />
+          <Route path="/" element={<Home />} />
+          <Route path="/quiz-categories" element={<QuizCategories />} />
+          {/* <Route path="/quiz/:categoryId" element={<QuizDifficulties />} /> */}
+          <Route
+            path="/quiz/:categoryId/:quizSetId/:questionNumber"
+            element={<PlayQuizSet />}
+          />
+          <Route
+            path="/quiz/:categoryId/:quizSetId/quiz-starter"
+            element={<QuizStarter />}
+          />
+          <Route path="/user-score" element={<>User Score Page</>} />
+          <Route path="*" element={<>Route Not found</>} />
         </Routes>
-      </header>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
