@@ -5,6 +5,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Ignore all files within
+/src/data/**
+
 # Runtime data
 pids
 *.pid
