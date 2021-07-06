@@ -1,22 +1,29 @@
 import React, { useState } from 'react';
-import faker from 'faker';
 import { useQuiz } from '../../context/quiz-context/quiz-context';
 import { quizCategories } from '../../data/quiz-data';
-import { Link } from 'react-router-dom';
-import { QuizDifficultyChoices } from './QuizDifficultyChoices';
-import { delayFunction } from '../../utils/utils';
-import { Btn, BtnInverted, Modal } from 'morphine-ui';
+import { QuizDifficultiesModal } from '../../components/QuizDifficultiesModal';
+import { QuizCategoryCard } from '../../components/QuizCategoryCard';
+import { QuizSetDetailsModal } from '../../components/QuizSetDetailsModal';
+import { genImgNameFromQuizName } from '../../utils/utils';
+
+/**
+ * TODO:
+ * 1. ADD REDUCERS
+ * 2. AND REMOVE UNDANTED STATES
+ */
 
 export const QuizCategories = () => {
   const { state, dispatch } = useQuiz();
-  const [
-    showQuizDifficultiesContainer,
-    setShowQuizDifficultiesContainer,
-  ] = useState(false);
 
   const [showStartQuizModal, setShowStartQuizModal] = useState(false);
   const [selectedQuizCategoryId, setSelectedQuizCategoryId] = useState('');
   const [selectedQuizSetId, setSelectedQuizSetId] = useState('');
+
+  /** Newly Added States */
+  const [isCategorySelected, setIsCategorySelected] = useState<boolean>(false);
+  const [showQuizDifficultiesModal, setShowQuizDifficultiesModal] = useState<
+    boolean
+  >(false);
 
   const desiredQuizSetFromId = state.currentQuizCategory.filter(
     (quizSetObj) => {
@@ -26,25 +33,18 @@ export const QuizCategories = () => {
 
   console.log({ desiredQuizSetFromId });
 
+  console.log({ currentState: state });
+
   return (
-    <div className="flex flex--column ">
-      <div className="mb--md text--xxl font-weight--500 text-align--c">
-        Select a Quiz Category
+    <div className="flex flex-col gap-6">
+      <div className="font-mono text-4xl font-medium text-center bg-black text-gray-200 p-4 rounded-2xl font-semibold shadow-2xl">
+        Choose Category
       </div>
-      <div className="flex flex--column gap--lg my">
+      <div className="flex gap-6 flex-wrap justify-center">
         {quizCategories.map((quizObj) => {
           return (
-            // <Link
-            //   key={quizObj.id}
-            //   to={`/quiz/${quizObj.id}`}
-            //   className="text-decoration--none text--dark flex flex--column">
-            // </Link>
-            <div className="flex flex--column gap--md">
-              <Btn
-                size="lg"
-                shape="capsule"
-                variant="dark"
-                key={faker.datatype.uuid()}
+            <div className="flex gap-16">
+              <QuizCategoryCard
                 onClick={() => {
                   /**
                    * NEED THIS TO PASS PARTICULAR CATEGORY
@@ -56,9 +56,8 @@ export const QuizCategories = () => {
                   // });
                   // console.log(quizObj.id);
                   setSelectedQuizCategoryId(quizObj.id);
-                  setShowQuizDifficultiesContainer(
-                    !showQuizDifficultiesContainer
-                  );
+                  setShowQuizDifficultiesModal(true);
+                  setIsCategorySelected(!isCategorySelected);
                   /**
                    * WORKING DISPATCH
                    */
@@ -67,141 +66,44 @@ export const QuizCategories = () => {
                     payload: quizObj.quizAllSets,
                   });
                 }}
-                style={{
-                  boxShadow: 'var(--card-box-shadow)',
-                  width: '100%',
-                }}>
-                {quizObj.name}
-              </Btn>
+                categoryTitle={quizObj.name}
+                imageName={genImgNameFromQuizName(quizObj.name)}
+              />
               <div
-                className="flex--column align-items--c justify-content--c bg--dark text--light border-radius--sm p--sm"
+                className="absolute"
                 style={{
                   display:
                     quizObj.id === selectedQuizCategoryId &&
-                    showQuizDifficultiesContainer
+                    showQuizDifficultiesModal
                       ? 'flex'
                       : 'none',
                 }}>
-                <QuizDifficultyChoices
-                  quizObj={quizObj}
+                {/* QUIZ DIFFICULTIES MODAL */}
+                <QuizDifficultiesModal
+                  showModal={showQuizDifficultiesModal}
+                  setShowModal={setShowQuizDifficultiesModal}
+                  quizCategory={quizObj}
                   showStartQuizModal={showStartQuizModal}
                   setShowStartQuizModal={setShowStartQuizModal}
                   setSelectedQuizSetId={setSelectedQuizSetId}
                   selectedQuizSetId={selectedQuizSetId}
                 />
-                {desiredQuizSetFromId && (
-                  <div>
-                    <Modal
-                      showModal={desiredQuizSetFromId && showStartQuizModal}
-                      style={{
-                        overflow: 'hidden',
-                      }}
-                      modalBackdropStyle={{
-                        opacity: 0.5,
-                        overflow: 'hidden',
-                      }}
-                      handleCloseModal={() =>
-                        setShowStartQuizModal(!showStartQuizModal)
-                      }
-                      modalHeader={
-                        <div
-                          className="p--sm"
-                          style={{
-                            backgroundColor:
-                              desiredQuizSetFromId.rules.difficulty === 'Easy'
-                                ? 'var(--success)'
-                                : desiredQuizSetFromId.rules.difficulty ===
-                                  'Medium'
-                                ? 'var(--warning)'
-                                : 'var(--danger)',
-                            color:
-                              desiredQuizSetFromId.rules.difficulty === 'Easy'
-                                ? 'var(--light)'
-                                : desiredQuizSetFromId.rules.difficulty ===
-                                  'Medium'
-                                ? 'var(--dark)'
-                                : 'var(--light)',
-                          }}>
-                          {desiredQuizSetFromId.rules.difficulty}
-                        </div>
-                      }
-                      modalBody={
-                        <div className="flex flex--column gap--sm text--sm p--sm text--light bg--dark">
-                          <div>
-                            Total Questions:{' '}
-                            {desiredQuizSetFromId.rules.totalQuestions}
-                          </div>
-                          <div>
-                            Total Points:{' '}
-                            {desiredQuizSetFromId.rules.totalPoints}
-                          </div>
-                          <div>
-                            Correct Answer Points:{' '}
-                            {desiredQuizSetFromId.rules.correctAnswerPoints}
-                          </div>
-                          <div>
-                            Incorrect Answer Points:{' '}
-                            {desiredQuizSetFromId.rules.inCorrectAnswerPoints}
-                          </div>
-                          <div>
-                            Questions Type: {desiredQuizSetFromId.rules.type}{' '}
-                            Choice
-                          </div>
-                        </div>
-                      }
-                      modalFooter={
-                        <div
-                          className="flex flex--column align-items--c"
-                          style={{
-                            backgroundColor:
-                              desiredQuizSetFromId.rules.difficulty === 'Easy'
-                                ? 'var(--success)'
-                                : desiredQuizSetFromId.rules.difficulty ===
-                                  'Medium'
-                                ? 'var(--warning)'
-                                : 'var(--danger)',
-                            color:
-                              desiredQuizSetFromId.rules.difficulty === 'Easy'
-                                ? 'var(--light)'
-                                : desiredQuizSetFromId.rules.difficulty ===
-                                  'Medium'
-                                ? 'var(--dark)'
-                                : 'var(--light)',
-                          }}>
-                          <Link
-                            to={`/quiz/${selectedQuizCategoryId}/${desiredQuizSetFromId.quizSetId}/quiz-starter`}
-                            onClick={() => {
-                              /**DELAY Close Modal */
-                              delayFunction(() => {
-                                setShowStartQuizModal(false);
-                              }, 500);
-                              /**
-                               * FIX THIS
-                               */
-                              // dispatch({
-                              //   type: 'SET_CURRENT_QUIZSET',
-                              //   payload: {
-                              //     desiredQuizSetId: selectedQuizSetId,
-                              //   },
-                              // });
-                            }}>
-                            <Btn
-                              className="m--sm text-align--c"
-                              size="sm"
-                              variant="dark">
-                              Play Quiz
-                            </Btn>
-                          </Link>
-                        </div>
-                      }
-                    />
-                  </div>
-                )}
               </div>
             </div>
           );
         })}
       </div>
+      {/** * NEW QUIZ SET DETAILS MODAL */}
+      {desiredQuizSetFromId && (
+        <QuizSetDetailsModal
+          modalTitle={desiredQuizSetFromId.rules.difficulty}
+          showModal={desiredQuizSetFromId && showStartQuizModal}
+          setShowModal={setShowStartQuizModal}
+          setShowStartQuizModal={setShowStartQuizModal}
+          quizSet={desiredQuizSetFromId}
+          selectedQuizCategoryId={selectedQuizCategoryId}
+        />
+      )}
     </div>
   );
 };

@@ -6,7 +6,7 @@ export const QuizStarter = () => {
   const { categoryId, quizSetId } = useParams();
   let navigate = useNavigate();
 
-  const quizStartingIn = useCountdown(2);
+  const quizStartingIn = useCountdown(5);
 
   /** AT ANY COST DO NOT CHANGE THE 0 IN ROUTE
    * ELSE, ALL LOGIC IN PlayQuizSet
@@ -16,27 +16,21 @@ export const QuizStarter = () => {
     navigate(`/quiz/${categoryId}/${quizSetId}/${0}`);
   }
 
+  /** TODO: DISPLAY
+   * 1. QUIZ CATEGGORY IMAGE AND
+   * 2. QUIZ SET DIFFICULTY LEVEL */
+
   return (
-    <div className="flex flex--column justify-content--c align-items--c gap--sm">
-      <div className="text--xxxl">Quiz Staring in...</div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: '50%',
-          fontSize: '5rem',
-          backgroundColor: 'var(--info)',
-          color: 'var(--light)',
-          height: '12rem',
-          width: '12rem',
-          margin: '5vh 0',
-          fontWeight: 600,
-        }}>
-        {quizStartingIn}
+    <div className="flex flex-col flex-wrap justify-center items-center rounded-3xl bg-gray-200">
+      <div className="text-3xl bg-black text-white p-3 rounded-t-2xl">
+        Quiz Staring in...
       </div>
-      <div className="text--xxxl">Seconds</div>
+      <div className="flex flex-col items-center bg-red-600 text-white w-full rounded-b-2xl pb-3">
+        <p className="font-mono text-8xl bg-red-600 font-bold">
+          {quizStartingIn}
+        </p>
+        <p className="text-3xl">seconds</p>
+      </div>
     </div>
   );
 };
