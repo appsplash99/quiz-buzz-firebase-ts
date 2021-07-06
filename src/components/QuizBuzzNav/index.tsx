@@ -5,15 +5,14 @@ import { Link } from 'react-router-dom';
 
 export const QuizBuzzNav = () => {
   return (
-    <nav className="flex gap-2 h-8">
-      <Link
-        to="/quiz-categories"
-        className="new-nav__link text-decoration--none my--sm text-align--c">
+    <nav className="flex gap-2 items-center justify-center h-16 w-screen bg-red-500 text-xl text-white">
+      <Link to="/" className="">
+        Home
+      </Link>
+      <Link to="/quiz-categories" className="">
         Quiz-Categories
       </Link>
-      <Link
-        to="*"
-        className="new-nav__link text-decoration--none my--sm text-align--c">
+      <Link to="*" className="">
         Reset
       </Link>
     </nav>
@@ -56,11 +55,11 @@ export const QuizBuzzNav = () => {
 //       navbarLogo={
 //         <Link
 //           to="/"
-//           className="flex align-items--c new-nav__link text-decoration--none gap--xs"
+//           className="flex items-center new-nav__link text-decoration--none gap--xs"
 //           style={{
 //             marginRight: 'var(--space-md)',
 //           }}>
-//           <div className="flex flex--column align-items--fe justify-content--c gap--xxxxs">
+//           <div className="flex flex-col align-items--fe justify-center gap--xxxxs">
 //             <span className="font-weight--800">QUIZ</span>
 //             <span className="font-weight--800">BUZZ</span>
 //           </div>
