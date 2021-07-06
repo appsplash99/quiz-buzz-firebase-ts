@@ -4,6 +4,8 @@ import {
 } from '../context/quiz-context/quiz-context.types';
 import { QuizCategory } from '../data/quiz-data.types';
 
+/** TODO: ADD REDUCERS */
+
 export type ACTIONTYPE =
   | { type: 'LOAD_QUIZ_CATEGORIES_DATA'; payload: QuizCategory[] }
   | { type: 'SET_CURRENT_QUIZSET'; payload: { desiredQuizSetId: string } }
