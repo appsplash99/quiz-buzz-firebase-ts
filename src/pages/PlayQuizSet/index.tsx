@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Btn } from 'morphine-ui';
+
+// TODO: MAKE CUSTOM BUTTON
+import { Btn } from '../../components/Button';
 import { useNavigate, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useQuiz } from '../../context/quiz-context/quiz-context';
