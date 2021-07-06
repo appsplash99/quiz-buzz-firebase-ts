@@ -5,6 +5,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Ignore firebase SecretKey
+# TODO: MOVE THIS INTO .env
+secretAccountKey.json
+
 # Ignore all files within
 /src/data/**
 
