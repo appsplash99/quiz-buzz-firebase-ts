@@ -1,17 +1,16 @@
-import React from 'react';
+import React from "react";
 // import { useQuiz } from '../../context/quiz-context/quiz-context';
-import { QuizCategory } from '../../data/quiz-data.types';
-import { generateQuizDifficultyClassNames } from '../../utils/utils';
+import { QuizCategory } from "../../data/quiz-data.types";
+import { generateQuizDifficultyClassNames } from "../../utils";
 
-/** TODO: check if type'interface */
-export type QuizDifficultyChoicesProps = {
+export interface QuizDifficultyChoicesProps {
   setShowStartQuizModal: React.Dispatch<React.SetStateAction<boolean>>;
   // selectedQuizCategoryId: string;
   showStartQuizModal: boolean;
   setSelectedQuizSetId: React.Dispatch<React.SetStateAction<string>>;
   selectedQuizSetId: string;
   quizObj: QuizCategory;
-};
+}
 
 export const QuizDifficultyChoices: React.FC<QuizDifficultyChoicesProps> = ({
   // selectedQuizCategoryId,
@@ -35,9 +34,8 @@ export const QuizDifficultyChoices: React.FC<QuizDifficultyChoicesProps> = ({
                 setSelectedQuizSetId(quizSet.quizSetId);
                 console.log(selectedQuizSetId);
               }}
-              className={`p-2 rounded-md text ${generateQuizDifficultyClassNames(
-                quizSet.rules.difficulty
-              )}`}>
+              className={`p-2 rounded-md text ${generateQuizDifficultyClassNames(quizSet.rules.difficulty)}`}
+            >
               {quizSet.rules.difficulty}
             </button>
           </div>

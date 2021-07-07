@@ -1,17 +1,14 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { QuizSet } from '../../data/quiz-data.types';
-import {
-  delayFunction,
-  generateQuizDifficultyClassNames,
-} from '../../utils/utils';
+import React from "react";
+import { Link } from "react-router-dom";
+import { QuizSet } from "../../data/quiz-data.types";
+import { delayFunction, generateQuizDifficultyClassNames } from "../../utils";
 
 /** TODO:
  * 1. MOVE PROPS TO type file
  * 2. Check whether quiz-buzz-ts projects contains typescript types or interfaces
  *
  */
-export type quizSetDetailsModalProps = {
+export interface quizSetDetailsModalProps {
   modalTitle?:
     | React.ReactNode
     | HTMLElement
@@ -22,7 +19,7 @@ export type quizSetDetailsModalProps = {
   quizSet: QuizSet;
   selectedQuizCategoryId: string;
   setShowStartQuizModal: React.Dispatch<React.SetStateAction<boolean>>;
-};
+}
 
 export const QuizSetDetailsModal: React.FC<quizSetDetailsModalProps> = ({
   selectedQuizCategoryId,
@@ -43,16 +40,14 @@ export const QuizSetDetailsModal: React.FC<quizSetDetailsModalProps> = ({
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                   <h3 className="text-3xl font-semibold">
-                    <div
-                      className={`p-4 rounded-lg ${generateQuizDifficultyClassNames(
-                        quizSet.rules.difficulty
-                      )}`}>
+                    <div className={`p-4 rounded-lg ${generateQuizDifficultyClassNames(quizSet.rules.difficulty)}`}>
                       {modalTitle}
                     </div>
                   </h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                    onClick={() => setShowModal(false)}>
+                    onClick={() => setShowModal(false)}
+                  >
                     <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
                       ×
                     </span>
@@ -63,13 +58,8 @@ export const QuizSetDetailsModal: React.FC<quizSetDetailsModalProps> = ({
                   <div className="flex flex-col gap-4 text-sm p-4 text-white bg-black">
                     <p>Total Questions: {quizSet.rules.totalQuestions}</p>
                     <p>Total Points: {quizSet.rules.totalPoints}</p>
-                    <p>
-                      Correct Answer Points: {quizSet.rules.correctAnswerPoints}
-                    </p>
-                    <p>
-                      Incorrect Answer Points:{' '}
-                      {quizSet.rules.inCorrectAnswerPoints}
-                    </p>
+                    <p>Correct Answer Points: {quizSet.rules.correctAnswerPoints}</p>
+                    <p>Incorrect Answer Points: {quizSet.rules.inCorrectAnswerPoints}</p>
                     <p>Questions Type: {quizSet.rules.type} Choice</p>
                   </div>
                 </div>
@@ -78,7 +68,8 @@ export const QuizSetDetailsModal: React.FC<quizSetDetailsModalProps> = ({
                   <button
                     className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
-                    onClick={() => setShowStartQuizModal(false)}>
+                    onClick={() => setShowStartQuizModal(false)}
+                  >
                     Close
                   </button>
                   <Link
@@ -97,13 +88,15 @@ export const QuizSetDetailsModal: React.FC<quizSetDetailsModalProps> = ({
                       //     desiredQuizSetId: selectedQuizSetId,
                       //   },
                       // });
-                    }}>
+                    }}
+                  >
                     <button
                       className={`${generateQuizDifficultyClassNames(
                         quizSet.rules.difficulty
                       )} active:bg-green-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150`}
                       type="button"
-                      onClick={() => setShowStartQuizModal(false)}>
+                      onClick={() => setShowStartQuizModal(false)}
+                    >
                       Play Quiz
                     </button>
                   </Link>
