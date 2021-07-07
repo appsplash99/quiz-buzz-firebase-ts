@@ -9,7 +9,7 @@ export interface QuizBuzzNavProps {
   showMobileNav: boolean;
   setShowMobileNav: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
+// TODO: Fix Navbar Styles
 export const QuizBuzzNav: React.FC<QuizBuzzNavProps> = ({ showMobileNav, setShowMobileNav }) => {
   const auth = useAuth();
   const { data: user } = useUser();
