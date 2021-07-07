@@ -1,20 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { AuthProvider } from './context/auth-context/auth-context';
 import { QuizProvider } from './context/quiz-context/quiz-context';
+import { FirebaseAppProvider } from 'reactfire';
+import { firebaseConfig } from './firebase.config';
 import './index.css';
 import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <AuthProvider>
+    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
       <QuizProvider>
         <Router>
           <App />
         </Router>
       </QuizProvider>
-    </AuthProvider>
+    </FirebaseAppProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
