@@ -1,86 +1,69 @@
-import React, { useState } from 'react';
-import { GrTechnology } from 'react-icons/gr';
-// import { BtnIcon, NavbarResp1 } from 'morphine-ui/dist/index';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { GrTechnology } from "react-icons/gr";
+import { FaBars } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { useUser, useAuth } from "reactfire";
+import { UserMenu } from "./UserMenu";
 
-export const QuizBuzzNav = () => {
+export interface QuizBuzzNavProps {
+  showMobileNav: boolean;
+  setShowMobileNav: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const QuizBuzzNav: React.FC<QuizBuzzNavProps> = ({ showMobileNav, setShowMobileNav }) => {
+  const auth = useAuth();
+  const { data: user } = useUser();
+
   return (
-    <nav className="flex gap-2 items-center justify-center h-16 w-screen bg-red-500 text-xl text-white">
-      <Link to="/" className="">
-        Home
-      </Link>
-      <Link to="/quiz-categories" className="">
-        Quiz-Categories
-      </Link>
-      <Link to="*" className="">
-        Reset
-      </Link>
+    <nav className="bg-white shadow dark:bg-gray-800 w-screen">
+      <div className="px-6 py-3 mx-auto sm:w-8/12">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              {/* APP LOGO */}
+              <Link to="/" className="flex items-center no-underline gap-2">
+                <GrTechnology className=" h-12 w-12" />
+                <div className="flex flex-col items-end justify-center">
+                  <span className="font-mono font-extrabold">QUIZ</span>
+                  <span className="font-mono font-extrabold">BUZZ</span>
+                </div>
+              </Link>
+            </div>
+
+            {/* <!-- Mobile menu button --> */}
+            <div className="flex md:hidden">
+              <button
+                type="button"
+                className="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
+                aria-label="toggle menu"
+                onClick={() => setShowMobileNav(!showMobileNav)}
+              >
+                <FaBars />
+              </button>
+            </div>
+          </div>
+
+          {/* <!-- Mobile Menu open: "block", Menu closed: "hidden" --> */}
+          <div className={`${showMobileNav ? "block" : "hidden"} items-center md:flex`}>
+            {/* TODO: Fix Styles */}
+            <div className="flex flex-col mt-2 md:flex-row md:mt-0 md:mx-1">
+              <Link
+                to="/quiz-categories"
+                className="my-1 text-sm leading-5 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-indigo-400 hover:underline md:mx-4 md:my-0"
+              >
+                Quiz-Categories
+              </Link>
+
+              {/* TODO: Add Reset Functionality - via component*/}
+              <Link to="*" className="">
+                Reset
+              </Link>
+            </div>
+
+            <UserMenu user={user} auth={auth} />
+          </div>
+        </div>
+      </div>
     </nav>
   );
 };
-
-// export const QuizBuzzNav = () => {
-//   const [showMobileNav, setShowMobileNav] = useState<boolean>(false);
-
-//   return (
-//     <NavbarResp1
-//       style={{
-//         boxShadow: '0 2px 5px 1px rgb(64 60 67 / 16%)',
-//         padding: '0 var(--space-sm)',
-//         // backgroundColor: 'green',
-//         zIndex: 2,
-//       }}
-//       showMobileMenu={showMobileNav}
-//       handleShowMobileMenu={() => setShowMobileNav(!showMobileNav)}
-//       desktopMenuStyle={{
-//         height: '4rem',
-//       }}
-//       mobileMenuStyle={{
-//         borderBottomRightRadius: 'var(--space-md)',
-//         borderBottomLeftRadius: 'var(--space-md)',
-//         position: 'absolute',
-//         left: 0,
-//         right: 0,
-//         backgroundColor: showMobileNav ? 'orange' : '',
-//         height: '85vh',
-//         width: '95vw',
-//         margin: '0 auto',
-//         display: 'block',
-//         top: showMobileNav ? '5rem' : '-200%',
-//         zIndex: 1,
-//         opacity: showMobileNav ? 1 : 0,
-//         // transition: 'top 0.2s ease-in-out, backgroundColor 0.2s ease-out',
-//         transition: 'opacity 0.2s ease-in-out',
-//       }}
-//       navbarLogo={
-//         <Link
-//           to="/"
-//           className="flex items-center new-nav__link text-decoration--none gap--xs"
-//           style={{
-//             marginRight: 'var(--space-md)',
-//           }}>
-//           <div className="flex flex-col align-items--fe justify-center gap--xxxxs">
-//             <span className="font-weight--800">QUIZ</span>
-//             <span className="font-weight--800">BUZZ</span>
-//           </div>
-//           <BtnIcon size="lg" style={{ height: '50px', width: '50px' }}>
-//             <GrTechnology className="text--xxxl" />
-//           </BtnIcon>
-//         </Link>
-//       }
-//       navbarSearchIcon={<></>}>
-//       <>
-//         <Link
-//           to="/quiz-categories"
-//           className="new-nav__link text-decoration--none my--sm text-align--c">
-//           Quiz-Categories
-//         </Link>
-//         <Link
-//           to="*"
-//           className="new-nav__link text-decoration--none my--sm text-align--c">
-//           Reset
-//         </Link>
-//       </>
-//     </NavbarResp1>
-//   );
-// };
