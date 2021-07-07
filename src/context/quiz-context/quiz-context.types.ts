@@ -1,27 +1,27 @@
-import { QuizCategory, QuizSet } from '../../data/quiz-data.types';
+import { QuizCategory, QuizSet } from "../../data/quiz-data.types";
 
-export type UserOption = {
+export interface UserOption {
   questionNumber: number;
   option: string;
   isRight: boolean;
-};
+}
 
-export type User = {
+export interface User {
   score: number;
   correctAttempts: number;
   inCorrectAttempts: number;
   totalAttemptedQuestions: number;
   totalUnAttemptedQuestions: number;
   userQuizQuestions: UserOption[];
-};
+}
 
-export type InitialState = {
+export interface InitialState {
   currentQuizCategory: QuizSet[];
   currentQuizSet: QuizSet;
   user: User;
-};
+}
 
-export type ContextType = {
+export interface ContextType {
   state: InitialState;
   dispatch: React.Dispatch<any>;
-};
+}

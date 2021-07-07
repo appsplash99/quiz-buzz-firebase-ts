@@ -1,32 +1,24 @@
-import {
-  InitialState,
-  UserOption,
-} from '../context/quiz-context/quiz-context.types';
-import { QuizCategory } from '../data/quiz-data.types';
+import { InitialState, UserOption } from "../context/quiz-context/quiz-context.types";
+import { QuizCategory } from "../data/quiz-data.types";
 
 /** TODO: ADD REDUCERS */
 
 export type ACTIONTYPE =
-  | { type: 'LOAD_QUIZ_CATEGORIES_DATA'; payload: QuizCategory[] }
-  | { type: 'SET_CURRENT_QUIZSET'; payload: { desiredQuizSetId: string } }
-  | { type: 'SET_QUIZ_CATEGORY_SETS'; payload: [] }
-  | { type: 'INCREMENT_USER_SCORE'; payload: number }
-  | { type: 'DECREMENT_USER_SCORE'; payload: number }
-  | { type: 'CORRECT_ANSWER'; payload: UserOption }
-  | { type: 'INCORRECT_ANSWER'; payload: UserOption };
+  | { type: "LOAD_QUIZ_CATEGORIES_DATA"; payload: QuizCategory[] }
+  | { type: "SET_CURRENT_QUIZSET"; payload: { desiredQuizSetId: string } }
+  | { type: "SET_QUIZ_CATEGORY_SETS"; payload: [] }
+  | { type: "INCREMENT_USER_SCORE"; payload: number }
+  | { type: "DECREMENT_USER_SCORE"; payload: number }
+  | { type: "CORRECT_ANSWER"; payload: UserOption }
+  | { type: "INCORRECT_ANSWER"; payload: UserOption };
 
-export const quizReducer = (
-  prevState: InitialState,
-  action: ACTIONTYPE
-): InitialState => {
+export const quizReducer = (prevState: InitialState, action: ACTIONTYPE): InitialState => {
   switch (action.type) {
-    case 'SET_QUIZ_CATEGORY_SETS':
-      console.log('Mounted QUIZ CATEGORY Successfully');
+    case "SET_QUIZ_CATEGORY_SETS":
+      console.log("Mounted QUIZ CATEGORY Successfully");
       return {
         ...prevState,
-        currentQuizCategory: prevState.currentQuizCategory.concat(
-          action.payload
-        ),
+        currentQuizCategory: prevState.currentQuizCategory.concat(action.payload),
       };
 
     // case 'SET_CURRENT_QUIZSET':
@@ -40,20 +32,17 @@ export const quizReducer = (
     //     ),
     //   };
 
-    case 'CORRECT_ANSWER':
-      console.log('correct answer');
+    case "CORRECT_ANSWER":
+      console.log("correct answer");
       console.log(action.payload);
       return {
         ...prevState,
         user: {
           ...prevState.user,
-          score:
-            prevState.user.score +
-            prevState.currentQuizSet.rules.correctAnswerPoints,
+          score: prevState.user.score + prevState.currentQuizSet.rules.correctAnswerPoints,
           correctAttempts: prevState.user.correctAttempts + 1,
           totalAttemptedQuestions: prevState.user.totalAttemptedQuestions + 1,
-          totalUnAttemptedQuestions:
-            prevState.user.totalUnAttemptedQuestions - 1,
+          totalUnAttemptedQuestions: prevState.user.totalUnAttemptedQuestions - 1,
           /**Passing question object for score board */
           userQuizQuestions: prevState.user.userQuizQuestions.concat({
             ...action.payload,
@@ -61,19 +50,16 @@ export const quizReducer = (
         },
       };
 
-    case 'INCORRECT_ANSWER':
-      console.log('in-correct answer');
+    case "INCORRECT_ANSWER":
+      console.log("in-correct answer");
       return {
         ...prevState,
         user: {
           ...prevState.user,
-          score:
-            prevState.user.score +
-            Number(prevState.currentQuizSet.rules.inCorrectAnswerPoints),
+          score: prevState.user.score + Number(prevState.currentQuizSet.rules.inCorrectAnswerPoints),
           inCorrectAttempts: prevState.user.inCorrectAttempts + 1,
           totalAttemptedQuestions: prevState.user.totalAttemptedQuestions + 1,
-          totalUnAttemptedQuestions:
-            prevState.user.totalUnAttemptedQuestions - 1,
+          totalUnAttemptedQuestions: prevState.user.totalUnAttemptedQuestions - 1,
           /**Passing question object for score board */
           userQuizQuestions: prevState.user.userQuizQuestions.concat({
             ...action.payload,
