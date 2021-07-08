@@ -1,3 +1,5 @@
+import firebase from "firebase/app";
+
 export const delayFunction = (callback: () => void, delay: number) => {
   setTimeout(() => {
     callback();
@@ -21,5 +23,4 @@ export const genImgNameFromQuizName = (quizName: string) => {
   return quizName.toLowerCase().replace(" ", "-");
 };
 
-/** TODO: Find type for auth */
-export const signOut = (auth: any): Promise<void> => auth.signOut().then(() => console.log("signed out"));
+export const signOut = (auth: firebase.auth.Auth) => auth.signOut();
