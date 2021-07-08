@@ -16,8 +16,8 @@ import { QuizBuzzNav } from "./components/QuizBuzzNav";
 
 // Pages
 import { SignUpPage } from "./pages/SignUp";
-import { LoginPage } from "./pages/Login";
-import { UserScore } from "./pages/UserScore";
+import { LoginPage } from "./pages/Login/index";
+import { UserResultPage } from "./pages/UserResult";
 
 // css styles
 import "./App.css";
@@ -43,7 +43,7 @@ export const App = () => {
           {/* TODO: Fix this issue
            * Issue: After authentication, when user logs in - component completly unmounts and blank screen appears
            */}
-          <PrivateRoute path="/user-score" element={<UserScore />} />
+          <PrivateRoute path="/user-score" element={<UserResultPage />} />
           {/** PRIVATE ROUTES - ABOVE */}
 
           <Route path="*" element={<>Route Not found</>} />
