@@ -1,6 +1,6 @@
 import React from "react";
 import firebase from "firebase/app";
-import { signOut } from "../../utils";
+import { signOut } from "../../utils/functions";
 import { Link } from "react-router-dom";
 
 export interface UserMenuProps {

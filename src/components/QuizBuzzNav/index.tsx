@@ -30,6 +30,7 @@ export const QuizBuzzNav: React.FC<QuizBuzzNavProps> = ({ showMobileNav, setShow
               </Link>
             </div>
 
+            {/* TODO: REMOVE THESE COMMENTS */}
             {/* <!-- Mobile menu button --> */}
             <div className="flex md:hidden">
               <button
@@ -44,16 +45,10 @@ export const QuizBuzzNav: React.FC<QuizBuzzNavProps> = ({ showMobileNav, setShow
           </div>
 
           {/* <!-- Mobile Menu open: "block", Menu closed: "hidden" --> */}
-          <div className={`${showMobileNav ? "block" : "hidden"} items-center md:flex`}>
+          <div className={`${showMobileNav ? "block" : "hidden"} items-center md:flex md:gap-6`}>
             {/* TODO: Fix Styles */}
-            <div className="flex flex-col mt-2 md:flex-row md:mt-0 md:mx-1">
-              <Link
-                to="/quiz-categories"
-                className="my-1 text-sm leading-5 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-indigo-400 hover:underline md:mx-4 md:my-0"
-              >
-                Quiz-Categories
-              </Link>
-
+            <div className="flex flex-col gap-2 mt-2 md:flex-row md:mt-0 md:mx-1">
+              <Link to="/quiz-categories">Quiz-Categories</Link>
               {/* TODO: Add Reset Functionality - via component*/}
               <Link to="*" className="">
                 Reset
