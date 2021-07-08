@@ -1,127 +1,159 @@
 import React, { useState } from "react";
 import { useAuth } from "reactfire";
-import { FaUnlock, FaUser } from "react-icons/fa";
-import { IoMdMail, IoIosClose } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { FaUnlock, FaEye, FaEyeSlash, FaUser } from "react-icons/fa";
+import { IoMdMail } from "react-icons/io";
+import { Form, Formik, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 export const SignUpPage = () => {
   const auth = useAuth();
-  const [email, setEmail] = useState<string>("");
-  const [showError, setShowError] = useState<boolean>(false);
-  const [userName, setUserName] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [validationError, setValidationError] = useState<string>("");
 
-  const handleCloseErrorBox = () => {
-    setShowError(false);
-    setValidationError((prev) => "");
+  // toggle password
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  // formik state
+  const initialValues = {
+    username: "",
+    email: "",
+    password: "",
   };
 
-  /** TODO:  might need to change type of event */
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  // form validation
+  const validationSchema = Yup.object({
+    username: Yup.string()
+      .min(5, "Must have minimum 5 characters")
+      .max(15, "Must have max 15 characters")
+      .required("Name is Required"),
+    email: Yup.string().email("Invalid email format").required("Required"),
+    password: Yup.string()
+      .required("No password provided.")
+      .matches(
+        /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+        "Password must contain at least 8 characters, one uppercase, one number and one special case character"
+      ),
+  });
 
-    /** User Name cannot be empty */
-    if (!userName) {
-      setValidationError((prev) => "User Name cannot be Empty~");
-      setShowError(true);
-      return;
-    }
+  // formik's handle submit for signup
+  const onSubmit = async (values: typeof initialValues) => {
+    console.log("Form data", values);
 
     try {
-      const savedUser = await auth.createUserWithEmailAndPassword(email, password);
-      const resp = savedUser.user?.updateProfile({ displayName: userName });
+      const savedUser = await auth.createUserWithEmailAndPassword(values.email, values.password);
+      const resp = savedUser.user?.updateProfile({ displayName: values.username });
       // TODO: change ui response for succesful signup
       alert("Account Created");
     } catch (e) {
-      setShowError(true);
-      setValidationError((prev) => e.message);
+      // setShowError(true);
+      // setValidationError((prev) => e.message);
     }
   };
 
   return (
     <div className="flex flex-col w-full max-w-md px-4 py-8 bg-white rounded-lg shadow dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
-      <div className="self-center mb-6 text-xl font-light text-gray-600 sm:text-2xl dark:text-white">Sign Up</div>
-      <form onSubmit={handleSubmit}>
-        {/* ERROR VALIDATION */}
-        {validationError && (
-          <div
-            className={`${
-              !showError && "hidden"
-            } relative bg-yellow-200 border-yellow-600 text-yellow-600 border-l-4 p-4 mb-4`}
-          >
-            <IoIosClose
-              className="absolute right-2 top-2 text-yellow-600 font-extrabold text-4xl cursor-pointer"
-              onClick={handleCloseErrorBox}
-            />
-            <p className="font-bold">Error</p>
-            <p>{validationError}</p>
-          </div>
-        )}
+      <div className="self-center mb-6 text-xl font-light text-gray-600 sm:text-2xl dark:text-white w-4/5 sm:w-96">
+        Sign Up
+      </div>
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+        {(formikProps) => {
+          return (
+            <Form className="mt-1">
+              {/* USERNAME */}
+              <div className="mb-2 flex flex-col items-stretch gap-2">
+                <div className="flex relative">
+                  <span className="rounded-l-md inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
+                    <FaUser height="15" width="15" />
+                  </span>
+                  <Field
+                    name="username"
+                    type="username"
+                    placeholder="Your username"
+                    className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                  />
+                </div>
+                <ErrorMessage
+                  name="username"
+                  component="div"
+                  render={(err) => <div className="text-red-600 bg-red-200 p-2">{err}</div>}
+                />
+              </div>
 
-        <div className="flex flex-col mb-2">
-          <div className="flex relative ">
-            <span className="rounded-l-md inline-flex items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
-              <FaUser height="15" width="15" />
-            </span>
-            <input
-              type="text"
-              className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
-              placeholder="User Name"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-            />
-          </div>
-        </div>
+              {/* EMAIL */}
+              <div className="mb-2 flex flex-col items-stretch gap-2">
+                <div className="flex relative">
+                  <span className="rounded-l-md inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
+                    <IoMdMail height="15" width="15" />
+                  </span>
+                  <Field
+                    name="email"
+                    type="email"
+                    placeholder="Your email"
+                    className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                  />
+                </div>
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  render={(err) => <div className="text-red-600 bg-red-200 p-2">{err}</div>}
+                />
+              </div>
+              {/* PASSWORD */}
+              <div className="mb-2 flex flex-col items-stretch gap-2">
+                <div className="flex relative">
+                  <span className="rounded-l-md inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
+                    <FaUnlock height="15" width="15" />
+                  </span>
+                  <Field
+                    name="password"
+                    placeholder="Your password"
+                    type={showPassword ? "text" : "password"}
+                    className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                  />
+                  {/* TOGGLE PASSWORD */}
+                  <div className="absolute right-2 inset-y-1/2 rounded-l-md inline-flex items-center bg-white border-l text-gray-500 shadow-sm text-2xl cursor-pointer">
+                    {showPassword ? (
+                      <FaEyeSlash
+                        height="15"
+                        width="15"
+                        className="bg-gray-200 rounded-full p-1"
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    ) : (
+                      <FaEye
+                        height="15"
+                        width="15"
+                        className="bg-gray-200 rounded-full p-1"
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    )}
+                  </div>
+                </div>
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  render={(err) => <div className="text-red-600 bg-red-200 p-2">{err}</div>}
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={!formikProps.isValid}
+                className={`py-2 px-4 bg-red-600 hover:bg-red-700 focus:ring-red-500 focus:ring-offset-red-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg ${
+                  !formikProps.isValid && "cursor-not-allowed"
+                }`}
+              >
+                Submit
+              </button>
+            </Form>
+          );
+        }}
+      </Formik>
 
-        <div className="flex flex-col mb-2">
-          <div className="flex relative ">
-            <span className="rounded-l-md inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
-              <IoMdMail height="15" width="15" />
-            </span>
-            <input
-              type="text"
-              id="sign-in-email"
-              className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
-              placeholder="Your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col mb-6">
-          <div className="flex relative ">
-            <span className="rounded-l-md inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
-              <FaUnlock height="15" width="15" />
-            </span>
-            <input
-              type="password"
-              id="sign-in-email"
-              className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
-              placeholder="Your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-        </div>
-
-        <div className="flex w-full">
-          {/* TODO: CONVERT INTO CUSTOM BUTTON */}
-          <button
-            type="submit"
-            className="py-2 px-4 bg-red-600 hover:bg-red-700 focus:ring-red-500 focus:ring-offset-red-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
-          >
-            Sign Up
-          </button>
-        </div>
-      </form>
       <div className="flex items-center justify-center mt-6">
         <p className="inline-flex items-center text-xs font-thin text-center text-gray-500 hover:text-gray-700 dark:text-gray-100 dark:hover:text-white">
           <span className="ml-2 flex gap-2">
-            Already have an account?
-            <Link to="/login">
-              <span className="font-semibold">Login</span>
+            Don't have an account?
+            <Link to="/signup">
+              <span className="font-semibold">Sign Up</span>
             </Link>
           </span>
         </p>

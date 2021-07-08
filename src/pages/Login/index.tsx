@@ -84,25 +84,23 @@ export const LoginPage = () => {
                     className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
                   />
                   {/* TOGGLE PASSWORD */}
-                  {formikProps.touched.password && (
-                    <div className="absolute right-2 inset-y-1/2 rounded-l-md inline-flex items-center bg-white border-l text-gray-500 shadow-sm text-2xl cursor-pointer">
-                      {showPassword ? (
-                        <FaEyeSlash
-                          height="15"
-                          width="15"
-                          className="bg-gray-200 rounded-full p-1"
-                          onClick={() => setShowPassword(!showPassword)}
-                        />
-                      ) : (
-                        <FaEye
-                          height="15"
-                          width="15"
-                          className="bg-gray-200 rounded-full p-1"
-                          onClick={() => setShowPassword(!showPassword)}
-                        />
-                      )}
-                    </div>
-                  )}
+                  <div className="absolute right-2 inset-y-1/2 rounded-l-md inline-flex items-center bg-white border-l text-gray-500 shadow-sm text-2xl cursor-pointer">
+                    {showPassword ? (
+                      <FaEyeSlash
+                        height="15"
+                        width="15"
+                        className="bg-gray-200 rounded-full p-1"
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    ) : (
+                      <FaEye
+                        height="15"
+                        width="15"
+                        className="bg-gray-200 rounded-full p-1"
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    )}
+                  </div>
                 </div>
                 <ErrorMessage
                   name="password"
