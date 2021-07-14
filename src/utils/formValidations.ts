@@ -10,7 +10,7 @@ export const signupValidationSchema = Yup.object({
     .required("No password provided.")
     .matches(
       /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-      "Password must contain at least 8 characters, one uppercase, one number and one special case character"
+      "min 8 chars including: an uppercase, a num , and a special char"
     ),
 });
 
@@ -20,6 +20,6 @@ export const loginValidationSchema = Yup.object({
     .required("No password provided.")
     .matches(
       /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-      "Password must contain at least 8 characters, one uppercase, one number and one special case character"
+      "min 8 chars including an uppercase, a num , and a special char"
     ),
 });

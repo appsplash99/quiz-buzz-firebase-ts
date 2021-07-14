@@ -1,5 +1,3 @@
-import firebase from "firebase/app";
-
 export const delayFunction = (callback: () => void, delay: number) => {
   setTimeout(() => {
     callback();
@@ -22,5 +20,3 @@ export const generateQuizDifficultyClassNames = (expr: string) => {
 export const genImgNameFromQuizName = (quizName: string) => {
   return quizName.toLowerCase().replace(" ", "-");
 };
-
-export const signOut = (auth: firebase.auth.Auth) => auth.signOut();
