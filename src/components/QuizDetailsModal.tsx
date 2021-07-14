@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { QuizSet } from "../../data/quiz-data.types";
-import { delayFunction, generateQuizDifficultyClassNames } from "../../utils";
+import { QuizSet } from "../data/quiz-data.types";
+import { delayFunction, generateQuizDifficultyClassNames } from "../utils";
 
 /** TODO:
  * 1. MOVE PROPS TO type file

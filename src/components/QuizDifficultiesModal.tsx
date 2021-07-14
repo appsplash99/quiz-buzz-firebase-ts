@@ -1,7 +1,7 @@
 import React from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { QuizCategory } from "../../data/quiz-data.types";
-import { QuizDifficultyChoices } from "../../components/QuizDifficultyChoices";
+import { QuizCategory } from "../data/quiz-data.types";
+import { QuizDifficultyChoices } from "./QuizDifficultyChoices";
 
 /** TODO:
  * 2. change UI for the modal in mobile view

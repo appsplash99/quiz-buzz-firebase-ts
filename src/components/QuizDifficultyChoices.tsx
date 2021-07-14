@@ -1,7 +1,7 @@
 import React from "react";
 // import { useQuiz } from '../../context/quiz-context/quiz-context';
-import { QuizCategory } from "../../data/quiz-data.types";
-import { generateQuizDifficultyClassNames } from "../../utils";
+import { QuizCategory } from "../data/quiz-data.types";
+import { generateQuizDifficultyClassNames } from "../utils";
 
 export interface QuizDifficultyChoicesProps {
   setShowStartQuizModal: React.Dispatch<React.SetStateAction<boolean>>;
