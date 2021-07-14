@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useQuiz } from '../../context/quiz-context';
-import { quizCategories } from '../../data/quiz-data';
-import { QuizDifficultiesModal } from '../../components/QuizDifficultiesModal';
-import { QuizCategoryCard } from '../../components/QuizCategoryCard';
-import { QuizSetDetailsModal } from '../../components/QuizSetDetailsModal';
-import { genImgNameFromQuizName } from '../../utils';
+import { useQuiz } from '../context/quiz-context';
+import { quizCategories } from '../data/quiz-data';
+import { QuizDifficultiesModal } from '../components/QuizDifficultiesModal';
+import { QuizCategoryCard } from '../components/QuizCategoryCard';
+import { QuizSetDetailsModal } from '../components/QuizSetDetailsModal';
+import { genImgNameFromQuizName } from '../utils';
 
 /**
  * TODO:

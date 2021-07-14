@@ -1,83 +1,48 @@
 import React, { useState } from "react";
 import { useAuth } from "reactfire";
-import { Link } from "react-router-dom";
-import { FaUnlock, FaEye, FaEyeSlash, FaUser } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { FaUnlock } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { Form, Formik, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { loginValidationSchema } from "../utils/formValidations";
+import { useToast } from "../context/toast-context";
+import { TogglePassword } from "../components/TogglePassword";
 
-export const SignUpPage = () => {
+export const Login = () => {
   const auth = useAuth();
-
+  const { toast, toggleToast } = useToast();
+  const navigate = useNavigate();
   // toggle password
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   // formik state
   const initialValues = {
-    username: "",
     email: "",
     password: "",
   };
 
-  // form validation
-  const validationSchema = Yup.object({
-    username: Yup.string()
-      .min(5, "Must have minimum 5 characters")
-      .max(15, "Must have max 15 characters")
-      .required("Name is Required"),
-    email: Yup.string().email("Invalid email format").required("Required"),
-    password: Yup.string()
-      .required("No password provided.")
-      .matches(
-        /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-        "Password must contain at least 8 characters, one uppercase, one number and one special case character"
-      ),
-  });
-
-  // formik's handle submit for signup
+  // formik's handle submit
   const onSubmit = async (values: typeof initialValues) => {
-    console.log("Form data", values);
-
     try {
-      const savedUser = await auth.createUserWithEmailAndPassword(values.email, values.password);
-      const resp = savedUser.user?.updateProfile({ displayName: values.username });
-      // TODO: change ui response for succesful signup
-      alert("Account Created");
+      toggleToast({ toast, toastType: "info", messege: "Logging In..." });
+      const resp = await auth.signInWithEmailAndPassword(values.email, values.password);
+      toggleToast({ toast, toastType: "success", messege: "Login Successful" });
+      alert("Logged In: " + resp?.user?.email);
+      navigate("/quiz-categories");
     } catch (e) {
-      // setShowError(true);
-      // setValidationError((prev) => e.message);
+      toggleToast({ toast, toastType: "error", messege: "Unable to Login" });
     }
   };
 
   return (
     <div className="flex flex-col w-full max-w-md px-4 py-8 bg-white rounded-lg shadow dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
       <div className="self-center mb-6 text-xl font-light text-gray-600 sm:text-2xl dark:text-white w-4/5 sm:w-96">
-        Sign Up
+        Login To Your Account
       </div>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+      <Formik initialValues={initialValues} validationSchema={loginValidationSchema} onSubmit={onSubmit}>
         {(formikProps) => {
           return (
             <Form className="mt-1">
-              {/* USERNAME */}
-              <div className="mb-2 flex flex-col items-stretch gap-2">
-                <div className="flex relative">
-                  <span className="rounded-l-md inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
-                    <FaUser height="15" width="15" />
-                  </span>
-                  <Field
-                    name="username"
-                    type="username"
-                    placeholder="Your username"
-                    className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
-                  />
-                </div>
-                <ErrorMessage
-                  name="username"
-                  component="div"
-                  render={(err) => <div className="text-red-600 bg-red-200 p-2">{err}</div>}
-                />
-              </div>
-
               {/* EMAIL */}
               <div className="mb-2 flex flex-col items-stretch gap-2">
                 <div className="flex relative">
@@ -110,23 +75,7 @@ export const SignUpPage = () => {
                     className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent"
                   />
                   {/* TOGGLE PASSWORD */}
-                  <div className="absolute right-2 inset-y-1/2 rounded-l-md inline-flex items-center bg-white border-l text-gray-500 shadow-sm text-2xl cursor-pointer">
-                    {showPassword ? (
-                      <FaEyeSlash
-                        height="15"
-                        width="15"
-                        className="bg-gray-200 rounded-full p-1"
-                        onClick={() => setShowPassword(!showPassword)}
-                      />
-                    ) : (
-                      <FaEye
-                        height="15"
-                        width="15"
-                        className="bg-gray-200 rounded-full p-1"
-                        onClick={() => setShowPassword(!showPassword)}
-                      />
-                    )}
-                  </div>
+                  <TogglePassword showPassword={showPassword} setShowPassword={setShowPassword} />
                 </div>
                 <ErrorMessage
                   name="password"

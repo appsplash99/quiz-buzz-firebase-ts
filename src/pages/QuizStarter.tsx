@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { useCountdown } from '../../hooks/useCountdown';
+import { useCountdown } from '../hooks/useCountdown';
 
 export const QuizStarter = () => {
   const { categoryId, quizSetId } = useParams();

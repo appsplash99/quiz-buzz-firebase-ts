@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 
 import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
-import { useQuiz } from "../../context/quiz-context";
-import { quizCategories } from "../../data/quiz-data";
-import { Option } from "../../data/quiz-data.types";
+import { useQuiz } from "../context/quiz-context";
+import { quizCategories } from "../data/quiz-data";
+import { Option } from "../data/quiz-data.types";
 import { MdStar, MdTimelapse } from "react-icons/md";
 import { IoMdCheckmarkCircleOutline, IoMdCloseCircleOutline } from "react-icons/io";
-import { delayFunction, generateQuizDifficultyClassNames, genImgNameFromQuizName } from "../../utils";
+import { delayFunction, generateQuizDifficultyClassNames, genImgNameFromQuizName } from "../utils";
 
 export const PlayQuizSet = () => {
   const { state, dispatch } = useQuiz();
