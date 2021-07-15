@@ -1,20 +1,34 @@
-import React, { createContext, useContext, useReducer } from 'react';
-import { quizCategories } from '../../data/quiz-data';
-import { quizReducer } from '../../reducer/quiz-reducer';
-import { ContextType, InitialState } from './quiz-context.types';
+import React, { createContext, useContext, useReducer } from "react";
+import { quizCategories } from "../../data/quiz-data";
+import { quizReducer } from "../../reducer/quiz-reducer";
+import { ContextType, InitialState } from "./quiz-context.types";
+import moment from "moment";
 
 const initialState: InitialState = {
+  // new States
+  quizCategories: [],
+  showStartQuizModal: false,
+  showQuizDifficultiesModal: false,
+  selectedQuizCategoryId: "",
+  selectedQuizSetId: "",
+  currentQuestionNumber: 0,
+
+  // OLD STATES
+  // MIGHT NEED TO REMOVE SOME
+  currentQuizSet: quizCategories[0].quizAllSets[0],
   // currentQuiz: quizCategories.gk.set1,
   currentQuizCategory: [],
   /**quizCategories -> first item(gk quiz complete object) */
-  currentQuizSet: quizCategories[0].quizAllSets[0],
   // currentQuestion: 0,
   user: {
+    playTime: 0,
     score: 0,
     correctAttempts: 0,
     inCorrectAttempts: 0,
     totalAttemptedQuestions: 0,
     totalUnAttemptedQuestions: 15,
+    quizStartTime: moment(),
+    quizFinishTime: moment(),
     userQuizQuestions: [
       /**
        * Array of UserOption Objects
@@ -39,11 +53,7 @@ const QuizContext = createContext<ContextType>({
 
 export const QuizProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(quizReducer, initialState);
-  return (
-    <QuizContext.Provider value={{ state, dispatch }}>
-      {children}
-    </QuizContext.Provider>
-  );
+  return <QuizContext.Provider value={{ state, dispatch }}>{children}</QuizContext.Provider>;
 };
 
 export const useQuiz = () => useContext(QuizContext);
