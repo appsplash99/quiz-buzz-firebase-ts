@@ -1,7 +1,7 @@
 import React from "react";
 // TODO: Check whether this is the correct type
 import { RouteProps } from "react-router";
-import { Route, Navigate } from "react-router-dom";
+import { Route, Navigate,  } from "react-router-dom";
 import { useSigninCheck } from "reactfire";
 import { Loader } from "../components";
 

@@ -1,5 +1,5 @@
 import { Login } from "./Login";
-import { Signup } from "./Signup";
+import { Signup } from "./SignUp";
 import { PlayQuizSet } from "./PlayQuizSet";
 import { QuizCategories } from "./QuizCategories";
 import { QuizStarter } from "./QuizStarter";
