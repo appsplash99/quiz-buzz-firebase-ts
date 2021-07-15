@@ -1,38 +1,32 @@
 import React from "react";
-// import { useQuiz } from '../../context/quiz-context/quiz-context';
-import { QuizCategory } from "../data/quiz-data.types";
+import { useQuiz } from "../context/quiz-context";
+import { QuizCategory } from "../context/quiz-context/quiz-data.types";
 import { generateQuizDifficultyClassNames } from "../utils";
 
 export interface QuizDifficultyChoicesProps {
-  setShowStartQuizModal: React.Dispatch<React.SetStateAction<boolean>>;
-  // selectedQuizCategoryId: string;
-  showStartQuizModal: boolean;
-  setSelectedQuizSetId: React.Dispatch<React.SetStateAction<string>>;
-  selectedQuizSetId: string;
   quizObj: QuizCategory;
 }
 
-export const QuizDifficultyChoices: React.FC<QuizDifficultyChoicesProps> = ({
-  // selectedQuizCategoryId,
-  showStartQuizModal,
-  setShowStartQuizModal,
-  selectedQuizSetId,
-  setSelectedQuizSetId,
-  quizObj,
-}) => {
-  // const { state, dispatch } = useQuiz();
+export const QuizDifficultyChoices: React.FC<QuizDifficultyChoicesProps> = ({ quizObj }) => {
+  const {
+    state: { showStartQuizModal, quizCategories, selectedQuizCategoryId, selectedQuizSetId },
+    dispatch,
+  } = useQuiz();
+
+  const desiredQuizSet = quizCategories
+    .find((quizSetObj) => quizSetObj.id === selectedQuizCategoryId)
+    ?.quizAllSets?.find((quizCompleteSetObj) => quizCompleteSetObj.quizSetId === selectedQuizSetId);
 
   return (
     <div className="flex items-center justify-center gap-4 flex-wrap">
       {quizObj.quizAllSets.map((quizSet, index) => {
         return (
-          <div>
+          <div key={index}>
             <button
-              key={index}
               onClick={() => {
-                setShowStartQuizModal(!showStartQuizModal);
-                setSelectedQuizSetId(quizSet.quizSetId);
-                console.log(selectedQuizSetId);
+                dispatch({ type: "TOGGLE_SHOW_START_QUIZ_MODAL", payload: !showStartQuizModal });
+                dispatch({ type: "TOGGLE_SHOW_QUIZ_DIFFICULTIES_MODAL", payload: false });
+                dispatch({ type: "SET_SELECTED_QUIZ_SET_ID", payload: quizSet.quizSetId });
               }}
               className={`p-2 rounded-md text ${generateQuizDifficultyClassNames(quizSet.rules.difficulty)}`}
             >

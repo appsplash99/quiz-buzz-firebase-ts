@@ -1,11 +1,8 @@
 import React from "react";
+import { useUser } from "reactfire";
 import { Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "./PrivateRoute";
-import { Login, PlayQuizSet, QuizCategories, QuizStarter, SignUp, UserResult, Signup } from "../pages";
-
-import { DefaultReactFireQuery } from "../pages/reactfire/DefaultReactFireQuery";
-import { ReactFireTutorial } from "../pages/reactfire/ReactFireTutorial";
-import { useUser } from "reactfire";
+import { Login, PlayQuizSet, QuizCategories, QuizStarter, UserResult, Signup } from "../pages";
 
 export const QuizBuzzRoutes = () => {
   const { data: user } = useUser();
@@ -13,23 +10,16 @@ export const QuizBuzzRoutes = () => {
     <div className={`quiz-app__body ${user && "mt-8"}`}>
       <Routes>
         {/* PUBLIC ROUTES */}
-        <Route path="/" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-
-        {/* TODO: Remove below two routes when done */}
-        <PrivateRoute path="/default-reactfire-query" element={<DefaultReactFireQuery />} />
-        <PrivateRoute path="/react-fire-tutorial" element={<ReactFireTutorial />} />
+        {<Route path="/signup" element={<Signup />} />}
+        {!user && <Route path="/login" element={<Login />} />}
+        {/* TODO: MAKE LEADER BOARD */}
+        <Route path="/" element={<>QUIZ LEADERBOARD</>} />
 
         {/** PRIVATE ROUTES - BELOW */}
         <PrivateRoute path="/quiz-categories" element={<QuizCategories />} />
-        <PrivateRoute path="/quiz/:categoryId/:quizSetId/:questionNumber" element={<PlayQuizSet />} />
-        <PrivateRoute path="/quiz/:categoryId/:quizSetId/quiz-starter" element={<QuizStarter />} />
-
-        {/* TODO: Fix this issue
-         * Issue: After authentication, when user logs in - component completly unmounts and blank screen appears
-         */}
+        <PrivateRoute path="/play-quiz" element={<PlayQuizSet />} />
+        <PrivateRoute path="/quiz-starter" element={<QuizStarter />} />
         <PrivateRoute path="/user-score" element={<UserResult />} />
-        {/** PRIVATE ROUTES - ABOVE */}
 
         <Route path="*" element={<>Route Not found</>} />
       </Routes>

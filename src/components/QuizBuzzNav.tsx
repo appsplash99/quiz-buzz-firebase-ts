@@ -3,13 +3,13 @@ import { GrTechnology } from "react-icons/gr";
 import { FaBars } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useUser, useAuth } from "reactfire";
-import { UserMenu } from "./UserMenu";
+import { LoggedOutUserMenu } from "./LoggedOutUserMenu";
+import { LoggedInUserMenu } from "./LoggedInUserMenu";
 
 export interface QuizBuzzNavProps {
   showMobileNav: boolean;
   setShowMobileNav: React.Dispatch<React.SetStateAction<boolean>>;
 }
-// TODO: Fix Navbar Styles
 export const QuizBuzzNav: React.FC<QuizBuzzNavProps> = ({ showMobileNav, setShowMobileNav }) => {
   const auth = useAuth();
   const { data: user } = useUser();
@@ -30,8 +30,7 @@ export const QuizBuzzNav: React.FC<QuizBuzzNavProps> = ({ showMobileNav, setShow
               </Link>
             </div>
 
-            {/* TODO: REMOVE THESE COMMENTS */}
-            {/* <!-- Mobile menu button --> */}
+            {/*  Mobile menu button */}
             <div className="flex md:hidden">
               <button
                 type="button"
@@ -44,18 +43,10 @@ export const QuizBuzzNav: React.FC<QuizBuzzNavProps> = ({ showMobileNav, setShow
             </div>
           </div>
 
-          {/* <!-- Mobile Menu open: "block", Menu closed: "hidden" --> */}
+          {/* Mobile Menu open: "block", Menu closed: "hidden" */}
           <div className={`${showMobileNav ? "block" : "hidden"} items-center md:flex md:gap-6`}>
-            {/* TODO: Fix Styles */}
-            <div className="flex flex-col gap-2 mt-2 md:flex-row md:mt-0 md:mx-1">
-              <Link to="/quiz-categories">Quiz-Categories</Link>
-              {/* TODO: Add Reset Functionality - via component*/}
-              <Link to="*" className="">
-                Reset
-              </Link>
-            </div>
-
-            <UserMenu user={user} auth={auth} />
+            <LoggedInUserMenu user={user} auth={auth} />
+            <LoggedOutUserMenu user={user} auth={auth} />
           </div>
         </div>
       </div>

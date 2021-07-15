@@ -7,9 +7,11 @@ import { QuizDifficultyChoices } from "./QuizDifficultyChoices";
 import { QuizSetDetailsModal } from "./QuizDetailsModal";
 import { TogglePassword } from "./TogglePassword";
 import { Signup } from "../pages/Signup";
+import { Loader } from "./Loader/Loader";
 
 export {
   Signup,
+  Loader,
   QuizBuzzNav,
   PrivateRoute,
   QuizBuzzRoutes,
