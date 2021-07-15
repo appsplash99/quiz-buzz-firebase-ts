@@ -1,48 +1,38 @@
-import React from 'react';
-import { Route, Routes } from 'react-router';
-import './App.css';
-import { Home } from './pages/Home';
-// import { QuizCategories } from './pages/QuizCategories';
-import { QuizCategories } from './pages/QuizCategories';
-import { PlayQuizSet } from './pages/PlayQuizSet';
-import { QuizStarter } from './pages/QuizStarter';
-import { QuizBuzzNav } from './components/QuizBuzzNav';
-import { DropDown } from './components/Dropdown';
+import React, { useState, useEffect } from "react";
+import firebase from "firebase";
+import "firebase/firestore";
+import "firebase/auth";
+import { useUser } from "reactfire";
+import { useQuiz } from "./context/quiz-context";
+import { useToast } from "./context/toast-context";
+import { QuizBuzzNav, QuizBuzzRoutes, Loader } from "./components";
 
 export const App = () => {
-  /** TODO: temporary */
-  const [showDropDown, setShowDropDown] = React.useState<boolean>(false);
+  const [showMobileNav, setShowMobileNav] = React.useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const { data: user } = useUser();
+  const { ToastContainer } = useToast();
+  const { dispatch } = useQuiz();
 
+  useEffect(() => {
+    setLoading(true);
+    const unsubscribe = firebase
+      .firestore()
+      .collection("quizCategories")
+      .onSnapshot((snap) => {
+        const data = snap.docs.map((doc) => doc.data());
+        dispatch({ type: "MOUNT_QUIZ_CATEGORIES", payload: data });
+        setLoading(false);
+      });
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) return <Loader />;
   return (
     <div className="flex flex-col items-center">
-      <QuizBuzzNav />
-      <div className="quiz-app__body p--lg">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          {/** TODO: temporary */}
-          <Route
-            path="/dropdown"
-            element={
-              <DropDown
-                showDropDown={showDropDown}
-                handleShowDropDown={() => setShowDropDown(!showDropDown)}
-              />
-            }
-          />
-          {/* <Route path="/quiz-categories" element={<QuizCategories />} /> */}
-          <Route path="/quiz-categories" element={<QuizCategories />} />
-          <Route
-            path="/quiz/:categoryId/:quizSetId/:questionNumber"
-            element={<PlayQuizSet />}
-          />
-          <Route
-            path="/quiz/:categoryId/:quizSetId/quiz-starter"
-            element={<QuizStarter />}
-          />
-          <Route path="/user-score" element={<>User Score Page</>} />
-          <Route path="*" element={<>Route Not found</>} />
-        </Routes>
-      </div>
+      {user && <QuizBuzzNav showMobileNav={showMobileNav} setShowMobileNav={setShowMobileNav} />}
+      <QuizBuzzRoutes />
+      <ToastContainer />
     </div>
   );
 };
