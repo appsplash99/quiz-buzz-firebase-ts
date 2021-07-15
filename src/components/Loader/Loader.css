@@ -1,0 +1,83 @@
+.loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  height: 2rem;
+  width: 2rem;
+  transform: translateX(-50%) translateY(-50%);
+}
+.container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2rem;
+  width: 2rem;
+}
+.block {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2rem;
+  width: 2rem;
+}
+.loader-square {
+  position: absolute;
+  height: 2rem;
+  width: 2rem;
+  background: #4f46e5;
+  animation: move 0.5s linear infinite;
+}
+.loader-square:nth-of-type(1) {
+  top: -2rem;
+  left: -2rem;
+  animation-delay: 0s;
+}
+.loader-square:nth-of-type(2) {
+  top: -2rem;
+  left: 0;
+  animation-delay: -0.0625s;
+}
+.loader-square:nth-of-type(3) {
+  top: -2rem;
+  left: 2rem;
+  animation-delay: -0.125s;
+}
+.loader-square:nth-of-type(4) {
+  top: 0;
+  left: 2rem;
+  animation-delay: -0.1875s;
+}
+.loader-square:nth-of-type(5) {
+  top: 2rem;
+  left: 2rem;
+  animation-delay: -0.25s;
+}
+.loader-square:nth-of-type(6) {
+  top: 2rem;
+  left: 0;
+  animation-delay: -0.3125s;
+}
+.loader-square:nth-of-type(7) {
+  top: 2rem;
+  left: -2rem;
+  animation-delay: -0.375s;
+}
+.loader-square:nth-of-type(8) {
+  top: 0;
+  left: -2rem;
+  animation-delay: -0.4375s;
+}
+@keyframes move {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
