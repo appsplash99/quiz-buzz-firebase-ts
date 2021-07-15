@@ -1,104 +1,74 @@
 import React, { useEffect, useState } from "react";
-
-import { useNavigate, useParams } from "react-router";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import moment from "moment";
 import { useQuiz } from "../context/quiz-context";
-import { quizCategories } from "../data/quiz-data";
-import { Option } from "../data/quiz-data.types";
 import { MdStar, MdTimelapse } from "react-icons/md";
 import { IoMdCheckmarkCircleOutline, IoMdCloseCircleOutline } from "react-icons/io";
-import { delayFunction, generateQuizDifficultyClassNames, genImgNameFromQuizName } from "../utils";
+import { delayFunction, generateQuizDifficultyClassNames, genImgNameFromQuizName, isUserCorrect } from "../utils";
 
 export const PlayQuizSet = () => {
-  const { state, dispatch } = useQuiz();
+  const {
+    dispatch,
+    state: {
+      selectedQuizSetId,
+      selectedQuizCategoryId,
+      quizCategories,
+      currentQuestionNumber,
+      user: { score },
+    },
+  } = useQuiz();
   const navigate = useNavigate();
-  const { categoryId, quizSetId, questionNumber } = useParams();
-  const [questionCountDown, setQuestionCountDown] = useState(Number(50));
-  const [selectedOption, setSelectedOption] = useState<string | number>("");
+  const [selectedOption, setSelectedOption] = useState<string>("");
   const [isCorrectOption, setIsCorrectOption] = useState<boolean | null>(null);
   const [optionColor, setOptionColor] = useState<{ bgColor: string; color: string }>({ bgColor: "", color: "" });
   const [currentSeconds, setCurrentSeconds] = useState(0);
+  const conditionForLastQuestion = Number(currentQuestionNumber) === 14;
 
-  console.log({ categoryId, quizSetId, questionNumber });
+  if (currentQuestionNumber > 15) navigate("user-score");
 
-  const conditionForLastQuestion = Number(questionNumber) === 14;
-  const nextQuestionRoute = `/quiz/${categoryId}/${quizSetId}/${Number(questionNumber) + 1}`;
-
-  /** Decrements Question Timer by One */
+  /** TODO: Navigate to User page after last question */
   useEffect(() => {
-    if (!questionCountDown) return;
-    const intervalId = setInterval(() => {
-      // setQuestionCountDown((prev) => prev - 1);
-      setCurrentSeconds((prev) => prev + 1);
-      // setCurrentTime((prev) => new Date());
-    }, 1000);
-    return () => clearInterval(intervalId);
-  }, []);
+    // co nditionForLastQuestion && navigate("/user-score");
+    console.log("FROM USE EFFECT");
 
-  /** Navigate to User page after last question */
-  useEffect(() => {
-    if (conditionForLastQuestion) {
-      console.log("FINAL CONDITION MET");
-      navigate(`/user-score`);
-    }
-  }, [conditionForLastQuestion, navigate]);
+    return () => {
+      console.log("FROM CLEANUP");
+      conditionForLastQuestion && navigate("/user-score");
+    };
+  }, [currentQuestionNumber]);
 
-  /** desiredQuizSet can be easy-set of gkQuiz */
   const desiredQuizSet = quizCategories
-    .find((quizSetObj) => quizSetObj.id === categoryId)
-    ?.quizAllSets?.find((quizCompleteSetObj) => quizCompleteSetObj.quizSetId === quizSetId);
-
-  console.log({ desiredQuizSet });
-
-  /** CHECKING IF USER IS CORRECT/INCORRECT */
-  const isUserCorrect = (optionObj: Option) => {
-    setSelectedOption(optionObj.option);
-    if (optionObj.isRight) {
-      console.log(`Correct answer ${optionObj}`);
-      setOptionColor({ bgColor: "bg-green-600", color: "text-white" });
-      setIsCorrectOption(true);
-      dispatch({ type: "CORRECT_ANSWER", payload: { ...optionObj, questionNumber: Number(questionNumber) + 1 } });
-      // return true;
-      return;
-    }
-    console.log(`InCorrect answer ${optionObj}`);
-    setOptionColor({ bgColor: "bg-red-600", color: "text-white" });
-    setIsCorrectOption(false);
-    dispatch({ type: "INCORRECT_ANSWER", payload: { ...optionObj, questionNumber: Number(questionNumber) + 1 } });
-    // return false;
-    return;
-  };
+    .find((quizSetObj) => quizSetObj.id === selectedQuizCategoryId)
+    ?.quizAllSets?.find((quizCompleteSetObj) => quizCompleteSetObj.quizSetId === selectedQuizSetId);
 
   return (
     <div className="flex flex-col justify-center gap-2 rounded-2xl bg-theme-white shadow-play-quiz-box max-w-sm mx-auto sm:max-w-none sm:mx-auto mb-4">
       <div className="flex items-center justify-around text-white text-lg py-2 px-4 font-semibold flex-wrap w-full bg-theme-dark-blue rounded-t-2xl">
-        <div className="flex items-center gap-3">
-          <img
-            className="text-xs"
-            /** TODO: optional - find an alternative for the path name */
-            src={`../../../src/assets/images/${genImgNameFromQuizName(state.currentQuizSet.category)}.png`}
-            alt={genImgNameFromQuizName(state.currentQuizSet.category)}
-            width="50"
-            height="50"
-          />
-          {desiredQuizSet && (
-            <div
-              className={`py-1 px-3 rounded-full ${generateQuizDifficultyClassNames(
-                desiredQuizSet?.rules?.difficulty
-              )}`}
-            >
-              {desiredQuizSet?.rules.difficulty}
-            </div>
-          )}
-        </div>
+        {desiredQuizSet && (
+          <div
+            className={`flex items-center gap-3 px-5 py-2 rounded-full ${generateQuizDifficultyClassNames(
+              desiredQuizSet?.rules?.difficulty
+            )}`}
+          >
+            <img
+              className="text-xs"
+              src={`../../../src/assets/images/${genImgNameFromQuizName(desiredQuizSet.category)}.png`}
+              alt={desiredQuizSet.category}
+              width="40"
+              height="40"
+            />
+
+            <div className={`py-1 px-3 rounded-full`}>{desiredQuizSet?.rules.difficulty}</div>
+          </div>
+        )}
         <div className="flex items-center gap-4 my-4 self-end justify-self-end">
           <div className="flex items-center gap-1">
-            <span className="text-3xl">{Number(questionNumber) + 1}</span>
+            <span className="text-3xl">{Number(currentQuestionNumber) + 1}</span>
             <span className="self-end"> /15</span>
           </div>
           <div className="flex items-center gap-1">
             <MdStar className="text-3xl" />
-            <p className="self-end">{state.user.score}</p>
+            <p className="self-end">{JSON.stringify(score)}</p>
           </div>
           <div className="flex items-center gap-1">
             <MdTimelapse className="text-3xl" />
@@ -108,15 +78,12 @@ export const PlayQuizSet = () => {
       </div>
       <div className="flex flex-col self-center justify-center gap-2 m-4 ">
         <div className="font-medium text-lg py-2 px-4">
-          {desiredQuizSet && desiredQuizSet.questions[Number(questionNumber)].question}
+          {desiredQuizSet && desiredQuizSet.questions[Number(currentQuestionNumber)].question}
         </div>
         <div className="flex flex-col justify-center gap-2">
-          <div
-            // style={defaultAnswersContainerStyle}
-            className="flex justify-between flex-wrap gap-4 py-4 px-2 rounded-lg"
-          >
+          <div className="flex justify-between flex-wrap gap-4 py-4 px-2 rounded-lg">
             {desiredQuizSet &&
-              desiredQuizSet.questions[Number(questionNumber)].options.map((eachOptionObj, index) => (
+              desiredQuizSet.questions[Number(currentQuestionNumber)].options.map((eachOptionObj, index) => (
                 <div
                   /** TODO: Make Options into a grid */
                   className={`flex flex-wrap items-center justify-start gap-2 font-semibold mx-auto py-3 px-2 rounded-lg shadow-quiz-options cursor-pointer transition-all duration-200 ease-in-out w-12/25 ${
@@ -125,13 +92,24 @@ export const PlayQuizSet = () => {
                       : "bg-theme-light-blue text-black"
                   }`}
                   onClick={() => {
-                    isUserCorrect(eachOptionObj);
-                    /**DELAY ROUTER */
+                    isUserCorrect({
+                      optionObj: eachOptionObj,
+                      setOptionColor,
+                      setIsCorrectOption,
+                      setSelectedOption,
+                      dispatch,
+                      desiredQuizSet,
+                    });
+                    /**DELAY Show Answer */
                     delayFunction(() => {
-                      navigate(nextQuestionRoute);
                       setIsCorrectOption(null);
-                    }, 1000);
-                    setQuestionCountDown(30);
+                      // reset selected option and styles
+                      setSelectedOption("");
+                    }, 300);
+                    /**DELAY GOING TO NEXT QUESTION */
+                    delayFunction(() => {
+                      dispatch({ type: "INCREMENT_QUESTION_NUMBER" });
+                    }, 500);
                   }}
                 >
                   {eachOptionObj.option === selectedOption ? (
@@ -152,18 +130,22 @@ export const PlayQuizSet = () => {
         </div>
         {/* NEXT BUTTON */}
         <div className="flex items-center gap-2">
-          <Link
-            to={nextQuestionRoute}
-            className="no-underline"
+          <button
+            className="px-4 py-1 bg-black text-white text-lg rounded-full"
             onClick={() => {
-              // setQuestionCountDown(30);
               setIsCorrectOption(null);
-              /**AT LAST QUESTION DISPLAY */
-              conditionForLastQuestion && navigate("/user-score");
+              /**AT LAST QUESTION */
+              // TODO: SAVE USER TIME INTO A STATE
+              //  Saving quiz finish time
+              if (conditionForLastQuestion) {
+                dispatch({ type: "GET_QUIZ_FINISH_TIME", payload: moment() });
+              } else {
+                dispatch({ type: "INCREMENT_QUESTION_NUMBER" });
+              }
             }}
           >
-            <button className="px-4 py-1 bg-black text-white text-lg rounded-full">Pass</button>
-          </Link>
+            {conditionForLastQuestion ? "Submit" : "Pass"}
+          </button>
           <div
             className={`font-semibold ${isCorrectOption === null && "hidden"} ${
               isCorrectOption ? "text-green-600" : "text-red-600"
