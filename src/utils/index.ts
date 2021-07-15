@@ -1,3 +1,6 @@
+import React from "react";
+import { Option, QuizSet } from "../context/quiz-context/quiz-data.types";
+
 export const delayFunction = (callback: () => void, delay: number) => {
   setTimeout(() => {
     callback();
@@ -19,4 +22,45 @@ export const generateQuizDifficultyClassNames = (expr: string) => {
 
 export const genImgNameFromQuizName = (quizName: string) => {
   return quizName.toLowerCase().replace(" ", "-");
+};
+
+interface IsUserCorrectType {
+  dispatch: (value: any) => void;
+  optionObj: Option;
+  setSelectedOption: React.Dispatch<React.SetStateAction<string>>;
+  setOptionColor: ({ bgColor, color }: { bgColor: string; color: string }) => void;
+  setIsCorrectOption: (x: boolean) => void;
+  desiredQuizSet: QuizSet;
+}
+
+/** CHECKING IF USER IS CORRECT/INCORRECT */
+export const isUserCorrect = ({
+  optionObj,
+  dispatch,
+  setOptionColor,
+  setSelectedOption,
+  setIsCorrectOption,
+  desiredQuizSet,
+}: IsUserCorrectType) => {
+  setSelectedOption(optionObj.option);
+  if (optionObj.isRight) {
+    // console.log(`Correct answer ${optionObj}`);
+    setOptionColor({ bgColor: "bg-green-600", color: "text-white" });
+    // dispatch({ type: "CORRECT_ANSWER", payload: optionObj });
+    dispatch({
+      type: "NEW_CORRECT_ANSWER",
+      payload: { desiredQuizSet, optionObj: { ...optionObj, isSelected: true } },
+    });
+    setIsCorrectOption(true);
+    return;
+  }
+  console.log(`InCorrect answer ${optionObj}`);
+  // dispatch({ type: "INCORRECT_ANSWER", payload: optionObj });
+  dispatch({
+    type: "NEW_INCORRECT_ANSWER",
+    payload: { desiredQuizSet, optionObj: { ...optionObj, isSelected: true } },
+  });
+  setOptionColor({ bgColor: "bg-red-600", color: "text-white" });
+  setIsCorrectOption(false);
+  return;
 };
