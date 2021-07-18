@@ -2,7 +2,7 @@ import React from "react";
 import { useUser } from "reactfire";
 import { Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "./PrivateRoute";
-import { Login, PlayQuizSet, QuizCategories, QuizStarter, UserResult, Signup } from "../pages";
+import { Login, PlayQuizSet, QuizCategories, QuizStarter, UserResult, SignUp, LeaderBoard } from "../pages";
 
 export const QuizBuzzRoutes = () => {
   const { data: user } = useUser();
@@ -10,10 +10,10 @@ export const QuizBuzzRoutes = () => {
     <div className={`quiz-app__body ${user && "mt-8"}`}>
       <Routes>
         {/* PUBLIC ROUTES */}
-        {<Route path="/signup" element={<Signup />} />}
+        <Route path="/" element={<LeaderBoard />} />
+        {<Route path="/signup" element={<SignUp />} />}
         {!user && <Route path="/login" element={<Login />} />}
         {/* TODO: MAKE LEADER BOARD */}
-        <Route path="/" element={<>QUIZ LEADERBOARD</>} />
 
         {/** PRIVATE ROUTES - BELOW */}
         <PrivateRoute path="/quiz-categories" element={<QuizCategories />} />

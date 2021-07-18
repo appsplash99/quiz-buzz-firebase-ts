@@ -10,8 +10,8 @@ import { useToast } from "../context/toast-context";
 import { signupValidationSchema } from "../utils/formValidations";
 import { TogglePassword } from "../components/TogglePassword";
 
-export const Signup = () => {
-  // TODO: Show User Leaderboard Here
+export const SignUp = () => {
+  
   const auth = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
