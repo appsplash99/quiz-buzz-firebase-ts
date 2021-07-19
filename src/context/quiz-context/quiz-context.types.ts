@@ -28,7 +28,7 @@ export interface InitialState {
   currentQuestionNumber: number;
   //
   currentQuizCategory: QuizSet[];
-  currentQuizSet: QuizSet;
+  // currentQuizSet: QuizSet | {};
   user: User;
 }
 
