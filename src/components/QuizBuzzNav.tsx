@@ -2,9 +2,9 @@ import React from "react";
 import { GrTechnology } from "react-icons/gr";
 import { FaBars } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useUser, useAuth } from "reactfire";
 import { LoggedOutUserMenu } from "./LoggedOutUserMenu";
 import { LoggedInUserMenu } from "./LoggedInUserMenu";
+import { useAuth, useUser } from "reactfire";
 
 export interface QuizBuzzNavProps {
   showMobileNav: boolean;
@@ -12,7 +12,6 @@ export interface QuizBuzzNavProps {
 }
 export const QuizBuzzNav: React.FC<QuizBuzzNavProps> = ({ showMobileNav, setShowMobileNav }) => {
   const auth = useAuth();
-  const { data: user } = useUser();
 
   return (
     <nav className="bg-white shadow dark:bg-gray-800 w-screen">
@@ -23,10 +22,10 @@ export const QuizBuzzNav: React.FC<QuizBuzzNavProps> = ({ showMobileNav, setShow
               {/* APP LOGO */}
               <Link to="/" className="flex items-center no-underline gap-2">
                 <GrTechnology className=" h-12 w-12" />
-                <div className="flex flex-col items-end justify-center">
+                {/* <div className="flex flex-col items-end justify-center">
                   <span className="font-mono font-extrabold">QUIZ</span>
                   <span className="font-mono font-extrabold">BUZZ</span>
-                </div>
+                </div> */}
               </Link>
             </div>
 
@@ -45,8 +44,7 @@ export const QuizBuzzNav: React.FC<QuizBuzzNavProps> = ({ showMobileNav, setShow
 
           {/* Mobile Menu open: "block", Menu closed: "hidden" */}
           <div className={`${showMobileNav ? "block" : "hidden"} items-center md:flex md:gap-6`}>
-            <LoggedInUserMenu user={user} auth={auth} />
-            <LoggedOutUserMenu user={user} auth={auth} />
+            {auth ? <LoggedInUserMenu /> : <LoggedOutUserMenu />}
           </div>
         </div>
       </div>
