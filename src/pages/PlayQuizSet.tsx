@@ -66,14 +66,14 @@ export const PlayQuizSet = () => {
             <span className="text-3xl">{Number(currentQuestionNumber) + 1}</span>
             <span className="self-end"> /15</span>
           </div>
-          <div className="flex items-center gap-1">
+          {/* <div className="flex items-center gap-1">
             <MdStar className="text-3xl" />
             <p className="self-end">{JSON.stringify(score)}</p>
           </div>
           <div className="flex items-center gap-1">
             <MdTimelapse className="text-3xl" />
             <p className="self-end">{new Date(currentSeconds * 1000).toISOString().substr(11, 8)}</p>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="flex flex-col self-center justify-center gap-2 m-4 ">
