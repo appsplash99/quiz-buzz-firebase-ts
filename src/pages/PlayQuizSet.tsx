@@ -4,7 +4,13 @@ import moment from "moment";
 import { useQuiz } from "../context/quiz-context";
 import { MdStar, MdTimelapse } from "react-icons/md";
 import { IoMdCheckmarkCircleOutline, IoMdCloseCircleOutline } from "react-icons/io";
-import { delayFunction, generateQuizDifficultyClassNames, genImgNameFromQuizName, isUserCorrect } from "../utils";
+import {
+  delayFunction,
+  desiredQuizSetfromId,
+  generateQuizDifficultyClassNames,
+  genImgNameFromQuizName,
+  isUserCorrect,
+} from "../utils";
 
 export const PlayQuizSet = () => {
   const {
@@ -37,15 +43,23 @@ export const PlayQuizSet = () => {
     };
   }, [currentQuestionNumber]);
 
-  const desiredQuizSet = quizCategories
-    .find((quizSetObj) => quizSetObj.id === selectedQuizCategoryId)
-    ?.quizAllSets?.find((quizCompleteSetObj) => quizCompleteSetObj.quizSetId === selectedQuizSetId);
+  // const desiredQuizSet = quizCategories
+  //   .find((quizSetObj) => quizSetObj.id === selectedQuizCategoryId)
+  //   ?.quizAllSets?.find((quizCompleteSetObj) => quizCompleteSetObj.quizSetId === selectedQuizSetId);
+
+  const desiredQuizSet = desiredQuizSetfromId({ quizCategories, selectedQuizCategoryId, selectedQuizSetId });
 
   return (
     <div className="flex flex-col justify-center gap-2 rounded-2xl bg-theme-white shadow-play-quiz-box max-w-sm mx-auto sm:max-w-none sm:mx-auto mb-4">
+      <div>Current QUestion Number: {currentQuestionNumber}</div>
+      <div>conditionForLastQuestion: {conditionForLastQuestion}</div>
+      <div>-</div>
+      <div>-</div>
+      <div>-</div>
       <div className="flex items-center justify-around text-white text-lg py-2 px-4 font-semibold flex-wrap w-full bg-theme-dark-blue rounded-t-2xl">
         {desiredQuizSet && (
           <div
+            key={desiredQuizSet.quizSetId}
             className={`flex items-center gap-3 px-5 py-2 rounded-full ${generateQuizDifficultyClassNames(
               desiredQuizSet?.rules?.difficulty
             )}`}
@@ -66,23 +80,27 @@ export const PlayQuizSet = () => {
             <span className="text-3xl">{Number(currentQuestionNumber) + 1}</span>
             <span className="self-end"> /15</span>
           </div>
-          {/* <div className="flex items-center gap-1">
+          {/* TODO: SHOW SCORE AND TIME RECORDED */}
+          <div className="flex items-center gap-1">
             <MdStar className="text-3xl" />
             <p className="self-end">{JSON.stringify(score)}</p>
           </div>
           <div className="flex items-center gap-1">
             <MdTimelapse className="text-3xl" />
             <p className="self-end">{new Date(currentSeconds * 1000).toISOString().substr(11, 8)}</p>
-          </div> */}
+          </div>
         </div>
       </div>
       <div className="flex flex-col self-center justify-center gap-2 m-4 ">
-        <div className="font-medium text-lg py-2 px-4">
-          {desiredQuizSet && desiredQuizSet.questions[Number(currentQuestionNumber)].question}
-        </div>
+        {!!conditionForLastQuestion && (
+          <div className="font-medium text-lg py-2 px-4">
+            {desiredQuizSet && desiredQuizSet.questions[Number(currentQuestionNumber)].question}
+          </div>
+        )}
         <div className="flex flex-col justify-center gap-2">
           <div className="flex justify-between flex-wrap gap-4 py-4 px-2 rounded-lg">
             {desiredQuizSet &&
+              desiredQuizSet.questions[Number(currentQuestionNumber)] &&
               desiredQuizSet.questions[Number(currentQuestionNumber)].options.map((eachOptionObj, index) => (
                 <div
                   /** TODO: Make Options into a grid */
