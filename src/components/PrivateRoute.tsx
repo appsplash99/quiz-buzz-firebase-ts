@@ -3,7 +3,10 @@ import { Route, Navigate } from "react-router-dom";
 import { useSigninCheck } from "reactfire";
 import { Loader } from "../components";
 
-export const PrivateRoute: React.FC<{ path: string }> = ({ path, ...props }): React.ReactElement | null => {
+export const PrivateRoute: React.FC<{
+  element: React.ReactElement | null;
+  path: string;
+}> = ({ path, element, ...props }) => {
   const { status, data: signInCheckResult } = useSigninCheck();
 
   if (status === "loading") {
@@ -11,7 +14,7 @@ export const PrivateRoute: React.FC<{ path: string }> = ({ path, ...props }): Re
   }
 
   if (signInCheckResult.signedIn === true) {
-    return <Route {...props} path={path} />;
+    return <Route path={path} element={element} {...props} />;
   } else {
     return <Navigate state={{ from: path }} replace to="/login" />;
   }
