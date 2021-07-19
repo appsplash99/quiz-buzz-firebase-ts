@@ -76,11 +76,13 @@ export const quizReducer = (prevState: InitialState, action: ACTIONTYPE): Initia
     case "NEW_CORRECT_ANSWER":
       console.log("correct answer");
       console.log(action.payload);
+      // console.log(Number(action.payload.desiredQuizSet.rules.corretAnswerPoints));
+      console.log(Number({ [action.payload]: action.payload }));
       return {
         ...prevState,
         user: {
           ...prevState.user,
-          score: prevState.user.score + Number(action.payload.desiredQuizSet.rules.corretAnswerPoints),
+          score: prevState.user.score + Number(action.payload.desiredQuizSet.rules.correctAnswerPoints),
           correctAttempts: prevState.user.correctAttempts + 1,
           totalAttemptedQuestions: prevState.user.totalAttemptedQuestions + 1,
           /**Passing question object for score board */
@@ -132,42 +134,6 @@ export const quizReducer = (prevState: InitialState, action: ACTIONTYPE): Initia
     //         quizSetObj.quizSetId === action.payload.desiredQuizSetId
     //     ),
     //   };
-
-    case "CORRECT_ANSWER":
-      console.log("correct answer");
-      console.log(action.payload);
-      console.log(prevState.user.userQuizQuestions);
-      return {
-        ...prevState,
-        user: {
-          ...prevState.user,
-          score: prevState.user.score + prevState.currentQuizSet.rules.correctAnswerPoints,
-          correctAttempts: prevState.user.correctAttempts + 1,
-          totalAttemptedQuestions: prevState.user.totalAttemptedQuestions + 1,
-          totalUnAttemptedQuestions: prevState.user.totalUnAttemptedQuestions - 1,
-          /**Passing question object for score board */
-          userQuizQuestions: prevState.user.userQuizQuestions.concat({
-            ...action.payload,
-          }),
-        },
-      };
-
-    case "INCORRECT_ANSWER":
-      console.log("in-correct answer");
-      return {
-        ...prevState,
-        user: {
-          ...prevState.user,
-          score: prevState.user.score + Number(prevState.currentQuizSet.rules.inCorrectAnswerPoints),
-          inCorrectAttempts: prevState.user.inCorrectAttempts + 1,
-          totalAttemptedQuestions: prevState.user.totalAttemptedQuestions + 1,
-          totalUnAttemptedQuestions: prevState.user.totalUnAttemptedQuestions - 1,
-          /**Passing question object for score board */
-          userQuizQuestions: prevState.user.userQuizQuestions.concat({
-            ...action.payload,
-          }),
-        },
-      };
 
     default:
       // break;
