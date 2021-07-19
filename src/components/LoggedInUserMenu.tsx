@@ -1,24 +1,29 @@
-import React from "react";
-import firebase from "firebase/app";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "../utils/firebaseFunctions";
-
-export interface UserMenuProps {
-  user: firebase.User;
-  auth: firebase.auth.Auth;
-}
+import { useUser, useAuth } from "reactfire";
 
 // TODO: FIX NAV USER MENU BUTTONS
-export const LoggedInUserMenu: React.FC<UserMenuProps> = ({ user, auth }) => {
+export const LoggedInUserMenu: React.FC = () => {
+  const auth = useAuth();
+  const { data: user } = useUser();
   const navigate = useNavigate();
+  const [userName, setUserName] = useState<string | null>("");
+
+  useEffect(() => {
+    if (!userName) {
+      setUserName(user?.displayName);
+    }
+  });
+
   return (
     <div className="flex flex-col items-center gap-2 mt-2 md:flex-row md:mt-0 md:mx-1">
       <h2 className="font-bold font-mono text-lg">
         <Link to="/quiz-categories">CATEGORIES</Link>
       </h2>
       {user && (
-        <div className="flex items-center gap-12 border-black border-black rounded-full p-1">
-          <h2 className="font-bold font-mono">{`${user.displayName}`}</h2>
+        <div className="flex items-center gap-6 border-black border-black rounded-full p-1">
+          <h2 className="font-bold font-mono">{`${userName}`}</h2>
           <button
             onClick={() => {
               signOut(auth);
