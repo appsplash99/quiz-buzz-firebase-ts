@@ -12,7 +12,7 @@ export const QuizStarter = () => {
     dispatch,
   } = useQuiz();
 
-  const quizStartingIn = useCountdown(10);
+  const quizStartingIn = useCountdown(7);
 
   useEffect(() => {
     if (quizStartingIn === 1) {
