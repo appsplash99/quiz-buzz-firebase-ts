@@ -4,7 +4,7 @@ import { FaBars } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { LoggedOutUserMenu } from "./LoggedOutUserMenu";
 import { LoggedInUserMenu } from "./LoggedInUserMenu";
-import { useAuth, useUser } from "reactfire";
+import { useAuth } from "reactfire";
 
 export interface QuizBuzzNavProps {
   showMobileNav: boolean;
