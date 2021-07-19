@@ -1,5 +1,5 @@
 import React from "react";
-import { Option, QuizSet } from "../context/quiz-context/quiz-data.types";
+import { Option, QuizCategories, QuizSet } from "../context/quiz-context/quiz-data.types";
 
 export const delayFunction = (callback: () => void, delay: number) => {
   setTimeout(() => {
@@ -63,4 +63,19 @@ export const isUserCorrect = ({
   setOptionColor({ bgColor: "bg-red-600", color: "text-white" });
   setIsCorrectOption(false);
   return;
+};
+
+/** */
+export const desiredQuizSetfromId = ({
+  selectedQuizCategoryId,
+  selectedQuizSetId,
+  quizCategories,
+}: {
+  selectedQuizCategoryId: string;
+  quizCategories: QuizCategories;
+  selectedQuizSetId: string;
+}) => {
+  return quizCategories
+    .find((quizSetObj) => quizSetObj.id === selectedQuizCategoryId)
+    ?.quizAllSets?.find((quizCompleteSetObj) => quizCompleteSetObj.quizSetId === selectedQuizSetId);
 };
