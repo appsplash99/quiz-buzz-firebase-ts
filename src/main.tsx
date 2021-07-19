@@ -6,8 +6,9 @@ import { ToastProvider } from "./context/toast-context";
 import { FirebaseAppProvider } from "reactfire";
 import { firebaseConfig } from "./firebase.config";
 import App from "./App";
-import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
+import "tailwindcss/tailwind.css";
+import "react-toastify/dist/ReactToastify.css";
 
 ReactDOM.render(
   <React.StrictMode>

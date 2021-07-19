@@ -6,6 +6,7 @@ import { useUser } from "reactfire";
 import { useQuiz } from "./context/quiz-context";
 import { useToast } from "./context/toast-context";
 import { QuizBuzzNav, QuizBuzzRoutes, Loader } from "./components";
+import "tailwindcss/tailwind.css";
 
 export const App = () => {
   const [showMobileNav, setShowMobileNav] = React.useState<boolean>(false);
