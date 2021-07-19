@@ -15,6 +15,7 @@ const initialState: InitialState = {
   // OLD STATES
   // MIGHT NEED TO REMOVE SOME
   // currentQuizSet: quizCategories[0].quizAllSets[0],
+  // currentQuizSet: {},
   // currentQuiz: quizCategories.gk.set1,
   currentQuizCategory: [],
   /**quizCategories -> first item(gk quiz complete object) */
