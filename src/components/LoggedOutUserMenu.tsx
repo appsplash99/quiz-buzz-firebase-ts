@@ -1,15 +1,12 @@
 import React from "react";
 import firebase from "firebase/app";
-import { signOut } from "../utils/firebaseFunctions";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useUser, useAuth } from "reactfire";
 
-export interface UserMenuProps {
-  user: firebase.User;
-  auth: firebase.auth.Auth;
-}
+export const LoggedOutUserMenu: React.FC = () => {
+  const { data: user } = useUser();
+  const auth = useAuth();
 
-export const LoggedOutUserMenu: React.FC<UserMenuProps> = ({ user, auth }) => {
-  const navigate = useNavigate();
   return (
     <div>
       {!user && (
