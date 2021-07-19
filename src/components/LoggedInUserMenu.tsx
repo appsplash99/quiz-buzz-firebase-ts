@@ -23,7 +23,7 @@ export const LoggedInUserMenu: React.FC = () => {
       </h2>
       {user && (
         <div className="flex items-center gap-6 border-black border-black rounded-full p-1">
-          <h2 className="font-bold font-mono">{`${userName}`}</h2>
+          {userName && <h2 className="font-bold font-mono">{`${userName}`}</h2>}
           <button
             onClick={() => {
               signOut(auth);
