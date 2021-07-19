@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useReducer } from "react";
-import { quizCategories } from "../../data/quiz-data";
 import { quizReducer } from "../../reducer/quiz-reducer";
 import { ContextType, InitialState } from "./quiz-context.types";
 import moment from "moment";
@@ -15,7 +14,7 @@ const initialState: InitialState = {
 
   // OLD STATES
   // MIGHT NEED TO REMOVE SOME
-  currentQuizSet: quizCategories[0].quizAllSets[0],
+  // currentQuizSet: quizCategories[0].quizAllSets[0],
   // currentQuiz: quizCategories.gk.set1,
   currentQuizCategory: [],
   /**quizCategories -> first item(gk quiz complete object) */
