@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Form, Formik, Field, ErrorMessage } from "formik";
+import bulbImage from "../assets/images/think.jpg";
 import { useAuth } from "reactfire";
 import { FaUnlock } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { TogglePassword } from "../components";
 import { useToast } from "../context/toast-context";
+import { Link, useNavigate } from "react-router-dom";
+import { Form, Formik, Field, ErrorMessage } from "formik";
 import { loginValidationSchema } from "../utils/formValidations";
 
 export const Login = () => {
@@ -33,7 +34,7 @@ export const Login = () => {
   return (
     <div className="flex flex-wrap w-full">
       <div className="w-1/2 shadow-2xl">
-        <img className="hidden object-cover w-full h-screen md:block" src="src/assets/images/think.jpg" />
+        <img className="hidden object-cover w-full h-screen md:block" src={bulbImage} alt="login-image" />
       </div>
       <div className="flex flex-col w-full md:w-1/2">
         <div className="flex justify-center pt-12 md:justify-start md:pl-12 md:-mb-24">
