@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-
 import firebase from "firebase";
 import { useAuth, useFirestore, useFirestoreDocData } from "reactfire";
-import { Link, useNavigate } from "react-router-dom";
-import { FaUnlock, FaUser } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
-import { Form, Formik, Field, ErrorMessage } from "formik";
+import bulbImage from "../assets/images/think.jpg";
+import { FaUnlock, FaUser } from "react-icons/fa";
 import { useToast } from "../context/toast-context";
-import { signupValidationSchema } from "../utils/formValidations";
+import { Link, useNavigate } from "react-router-dom";
+import { Form, Formik, Field, ErrorMessage } from "formik";
 import { TogglePassword } from "../components/TogglePassword";
+import { signupValidationSchema } from "../utils/formValidations";
 
 export const SignUp = () => {
   
@@ -60,7 +60,7 @@ export const SignUp = () => {
   return (
     <div className="flex flex-wrap w-full">
       <div className="w-1/2 shadow-2xl">
-        <img className="hidden object-cover w-full h-screen md:block" src="src/assets/images/think.jpg" />
+        <img className="hidden object-cover w-full h-screen md:block" src={bulbImage} />
       </div>
       <div className="flex flex-col w-full md:w-1/2">
         <div className="flex justify-center pt-12 md:justify-start md:pl-12 md:-mb-24">
