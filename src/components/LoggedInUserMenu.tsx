@@ -22,7 +22,7 @@ export const LoggedInUserMenu: React.FC = () => {
         <Link to="/quiz-categories">CATEGORIES</Link>
       </h2>
       {user && (
-        <div className="flex items-center gap-6 border-black border-black rounded-full p-1">
+        <div className="flex items-center gap-6 border-black rounded-full p-1">
           {userName && <h2 className="font-bold font-mono">{`${userName}`}</h2>}
           <button
             onClick={() => {
