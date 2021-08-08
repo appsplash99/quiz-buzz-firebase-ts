@@ -1,12 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import home from "../assets/images/home.png";
 
 //  TODO: ADD LANDING PAGE AND 404 PAGE
 export const LeaderBoard = () => {
   return (
     <div className="bg-indigo-900 relative h-screen w-screen">
       <img
-        src={`src/assets/images/home.png`}
+        // src={`src/assets/images/home.png`}
+        src={home}
+        alt="quiz-buzz-home"
         className="absolute h-full w-full object-cover"
         style={{ filter: "brightness(50%)" }}
       />
