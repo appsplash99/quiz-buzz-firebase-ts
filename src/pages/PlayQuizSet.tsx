@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import { useQuiz } from "../context/quiz-context";
-import { MdStar, MdTimelapse } from "react-icons/md";
-import { IoMdCheckmarkCircleOutline, IoMdCloseCircleOutline } from "react-icons/io";
 import {
   delayFunction,
-  desiredQuizSetfromId,
-  generateQuizDifficultyClassNames,
-  genImgNameFromQuizName,
   isUserCorrect,
+  desiredQuizSetfromId,
+  genImgNameFromQuizName,
+  generateQuizDifficultyClassNames,
+  shuffle,
 } from "../utils";
+import { useNavigate } from "react-router-dom";
+import { useQuiz } from "../context/quiz-context";
+import { MdStar, MdTimelapse } from "react-icons/md";
+import nsImage from '../assets/images/natural-science.png'
+import csImage from '../assets/images/computer-science.png'
+import gkImage from '../assets/images/general-knowledge.png'
+import { IoMdCheckmarkCircleOutline, IoMdCloseCircleOutline } from "react-icons/io";
 
 export const PlayQuizSet = () => {
   const {
@@ -34,7 +38,7 @@ export const PlayQuizSet = () => {
 
   /** TODO: Navigate to User page after last question */
   useEffect(() => {
-    // co nditionForLastQuestion && navigate("/user-score");
+    // conditionForLastQuestion && navigate("/user-score");
     console.log("FROM USE EFFECT");
 
     return () => {
@@ -66,12 +70,12 @@ export const PlayQuizSet = () => {
           >
             <img
               className="text-xs"
-              src={`../../../src/assets/images/${genImgNameFromQuizName(desiredQuizSet.category)}.png`}
+              // src={`../../../src/assets/images/${genImgNameFromQuizName(desiredQuizSet.category)}.png`}
+              src={desiredQuizSet.category === 'Computer Science' ? csImage : desiredQuizSet.category === 'General Knowledge' ? gkImage: nsImage }
               alt={desiredQuizSet.category}
               width="40"
               height="40"
             />
-
             <div className={`py-1 px-3 rounded-full`}>{desiredQuizSet?.rules.difficulty}</div>
           </div>
         )}
@@ -101,7 +105,7 @@ export const PlayQuizSet = () => {
           <div className="flex justify-between flex-wrap gap-4 py-4 px-2 rounded-lg">
             {desiredQuizSet &&
               desiredQuizSet.questions[Number(currentQuestionNumber)] &&
-              desiredQuizSet.questions[Number(currentQuestionNumber)].options.map((eachOptionObj, index) => (
+              shuffle(desiredQuizSet.questions[Number(currentQuestionNumber)].options).map((eachOptionObj, index) => (
                 <div
                   /** TODO: Make Options into a grid */
                   className={`flex flex-wrap items-center justify-start gap-2 font-semibold mx-auto py-3 px-2 rounded-lg shadow-quiz-options cursor-pointer transition-all duration-200 ease-in-out w-12/25 ${
