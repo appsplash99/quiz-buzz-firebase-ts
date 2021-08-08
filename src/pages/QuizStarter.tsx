@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
+import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { useQuiz } from "../context/quiz-context";
 import { useCountdown } from "../hooks/useCountdown";
-import moment from "moment";
+import nsImage from '../assets/images/natural-science.png'
+import csImage from '../assets/images/computer-science.png'
+import gkImage from '../assets/images/general-knowledge.png'
 import { generateQuizDifficultyClassNames, genImgNameFromQuizName } from "../utils";
 
 export const QuizStarter = () => {
@@ -40,7 +43,7 @@ export const QuizStarter = () => {
               )}`}
             >
               <img
-                src={`../../../src/assets/images/${genImgNameFromQuizName(desiredQuizSet.category)}.png`}
+                src={desiredQuizSet.category === 'Computer Science' ? csImage : desiredQuizSet.category === 'General Knowledge' ? gkImage: nsImage }
                 alt={desiredQuizSet.category}
                 width="100"
                 height="100"
