@@ -1,19 +1,19 @@
 import React, { useMemo, useEffect, useState } from "react";
 import moment from "moment";
 import {
-  delayFunction,
+  shuffle,
+  sectoHMS,
   isUserCorrect,
+  delayFunction,
   desiredQuizSetfromId,
   generateQuizDifficultyClassNames,
-  sectoHMS,
-  shuffle,
 } from "../utils";
 import { useNavigate } from "react-router-dom";
 import { useQuiz } from "../context/quiz-context";
 import { MdStar, MdTimelapse } from "react-icons/md";
-import nsImage from '../assets/images/natural-science.png'
-import csImage from '../assets/images/computer-science.png'
-import gkImage from '../assets/images/general-knowledge.png'
+import nsImage from "../assets/images/natural-science.png";
+import csImage from "../assets/images/computer-science.png";
+import gkImage from "../assets/images/general-knowledge.png";
 import { IoMdCheckmarkCircleOutline, IoMdCloseCircleOutline } from "react-icons/io";
 
 export const PlayQuizSet = () => {
@@ -30,8 +30,11 @@ export const PlayQuizSet = () => {
   const navigate = useNavigate();
   const [currentSeconds, setCurrentSeconds] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string>("");
-  const conditionForLastQuestion = Number(currentQuestionNumber) === 14;
+  // TODO: remove any
+  const [selectedOptionObj, setSelectedOptionObj] = useState<any>(null);
+  const conditionForLastQuestion = Number(currentQuestionNumber) === 15;
   const [isCorrectOption, setIsCorrectOption] = useState<boolean | null>(null);
+
   const [optionColor, setOptionColor] = useState<{ bgColor: string; color: string }>({ bgColor: "", color: "" });
 
   if (currentQuestionNumber > 15) navigate("user-score");
@@ -39,13 +42,15 @@ export const PlayQuizSet = () => {
   useEffect(() => {
     // conditionForLastQuestion && navigate("/user-score");
     console.log("FROM USE EFFECT");
-    const intervalId = setInterval(()=>{
-      setCurrentSeconds(prev => prev+1)
-    }, 1000)
+
+    const intervalId = setInterval(() => {
+      setCurrentSeconds((prev) => prev + 1);
+    }, 1000);
+
     return () => {
-      clearInterval(intervalId)
+      clearInterval(intervalId);
       console.log("FROM CLEANUP");
-      conditionForLastQuestion && navigate("/user-score");
+      // conditionForLastQuestion && navigate("/user-score");
     };
   }, [currentQuestionNumber]);
 
@@ -54,23 +59,20 @@ export const PlayQuizSet = () => {
   // DO NOT REMOVE THIS CODE
   // TODO: STyle this component
   if (!desiredQuizSet) {
-    return <>Return to Select Categories</>
+    return <>Return to Select Categories</>;
   }
 
   // As desiredQuizSet is Present
   // shuffle array only once depending on currentQuestionNumber
-  let memoisedOptions = useMemo(
-    () => { 
-      return shuffle(desiredQuizSet.questions[Number(currentQuestionNumber)].options)
-    },
-    [currentQuestionNumber],
-  )
+  let memoisedOptions = useMemo(() => {
+    return shuffle(desiredQuizSet.questions[Number(currentQuestionNumber)].options);
+  }, [currentQuestionNumber]);
 
   return (
     <div className="flex flex-col justify-center gap-2 rounded-2xl bg-theme-white shadow-play-quiz-box max-w-sm mx-auto sm:max-w-none sm:mx-auto mb-4">
       {/* TODO: CLean code after everything is done! */}
       {/* <div>Current QUestion Number: {currentQuestionNumber}</div>
-      <div>conditionForLastQuestion: {conditionForLastQuestion}</div>
+      <div>conditionForLastQuestion: {JSON.stringify(conditionForLastQuestion)}</div>
       <div>-</div>
       <div>-</div>
       <div>-</div> */}
@@ -82,7 +84,13 @@ export const PlayQuizSet = () => {
           )}`}
         >
           <img
-            src={desiredQuizSet.category === 'Computer Science' ? csImage : desiredQuizSet.category === 'General Knowledge' ? gkImage: nsImage }
+            src={
+              desiredQuizSet.category === "Computer Science"
+                ? csImage
+                : desiredQuizSet.category === "General Knowledge"
+                ? gkImage
+                : nsImage
+            }
             alt={desiredQuizSet.category}
             className="text-xs"
             height="40"
@@ -100,46 +108,31 @@ export const PlayQuizSet = () => {
             <MdStar className="text-3xl" />
             <p className="self-end">{JSON.stringify(score)}</p>
           </div>
-          <div className="flex items-center gap-1" >
+          <div className="flex items-center gap-1">
             <MdTimelapse className="text-3xl" />
             <span className="self-end inline-block w-16">{sectoHMS(currentSeconds)}</span>
           </div>
         </div>
       </div>
       <div className="flex flex-col self-center justify-center gap-2 m-4 ">
-        <div className="font-medium text-lg py-2 px-4">{desiredQuizSet.questions[Number(currentQuestionNumber)].question}</div>
+        <div className="font-medium text-lg py-2 px-4">
+          {desiredQuizSet.questions[Number(currentQuestionNumber)].question}
+        </div>
         <div className="flex flex-col justify-center gap-2">
           <div className="flex justify-between flex-wrap gap-4 py-4 px-2 rounded-lg">
             {desiredQuizSet.questions[Number(currentQuestionNumber)] &&
-              // desiredQuizSet.questions[Number(currentQuestionNumber)].options.map((eachOptionObj, index) => (
               memoisedOptions?.map((eachOptionObj, index) => (
                 <div
+                  key={index}
                   /** TODO: Make Options into a grid */
-                  className={`flex flex-wrap items-center justify-start gap-2 font-semibold mx-auto py-3 px-2 rounded-lg shadow-quiz-options cursor-pointer transition-all duration-200 ease-in-out w-12/25 ${
+                  className={`flex flex-wrap items-center justify-start gap-2 font-semibold mx-auto py-3 px-2 rounded-lg shadow-quiz-options cursor-pointer transition-all duration-200 ease-in-out w-12/25 
+                  ${
                     eachOptionObj.option === selectedOption
                       ? `${optionColor.bgColor} ${optionColor.color}`
                       : "bg-theme-light-blue text-black"
-                  }`}
-                  onClick={() => {
-                    isUserCorrect({
-                      optionObj: eachOptionObj,
-                      setOptionColor,
-                      setIsCorrectOption,
-                      setSelectedOption,
-                      dispatch,
-                      desiredQuizSet,
-                    });
-                    /**DELAY Show Answer */
-                    delayFunction(() => {
-                      setIsCorrectOption(null);
-                      // reset selected option and styles
-                      setSelectedOption("");
-                    }, 300);
-                    /**DELAY GOING TO NEXT QUESTION */
-                    delayFunction(() => {
-                      dispatch({ type: "INCREMENT_QUESTION_NUMBER" });
-                    }, 500);
-                  }}
+                  }
+                  ${eachOptionObj === selectedOptionObj && "text-gray-700"}`}
+                  onClick={() => setSelectedOptionObj(eachOptionObj)}
                 >
                   {eachOptionObj.option === selectedOption ? (
                     eachOptionObj.isRight ? (
@@ -148,7 +141,11 @@ export const PlayQuizSet = () => {
                       <IoMdCloseCircleOutline className="flex flex-col justify-center items-center h-8 w-8 rounded-full text-white text-lg" />
                     )
                   ) : (
-                    <p className="flex flex-col justify-center items-center p-2 text-white bg-black h-8 w-8 rounded-full">
+                    <p
+                      className={`flex flex-col justify-center items-center p-2  h-8 w-8 rounded-full ${
+                        eachOptionObj === selectedOptionObj ? "bg-white text-black" : "bg-black text-white"
+                      }`}
+                    >
                       {String.fromCharCode(65 + index)}
                     </p>
                   )}
@@ -163,24 +160,41 @@ export const PlayQuizSet = () => {
             className="px-4 py-1 bg-black text-white text-lg rounded-full"
             onClick={() => {
               setIsCorrectOption(null);
+              isUserCorrect({
+                optionObj: selectedOptionObj,
+                setOptionColor,
+                setIsCorrectOption,
+                setSelectedOption,
+                dispatch,
+                desiredQuizSet,
+              });
+
               /**AT LAST QUESTION */
               // TODO: SAVE USER TIME INTO A STATE
               //  Saving quiz finish time
               if (conditionForLastQuestion) {
                 dispatch({ type: "GET_QUIZ_FINISH_TIME", payload: moment() });
               } else {
-                dispatch({ type: "INCREMENT_QUESTION_NUMBER" });
+                delayFunction(() => {
+                  setIsCorrectOption(null);
+                  // reset selected option and styles
+                  setSelectedOption("");
+                  setSelectedOptionObj(null);
+                }, 300);
+                delayFunction(() => {
+                  dispatch({ type: "INCREMENT_QUESTION_NUMBER" });
+                }, 500);
               }
             }}
           >
-            {conditionForLastQuestion ? "Submit" : "Pass"}
+            {conditionForLastQuestion ? "Submit" : "Next"}
           </button>
           <div
             className={`font-semibold ${isCorrectOption === null && "hidden"} ${
               isCorrectOption ? "text-green-600" : "text-red-600"
             }`}
           >
-            {isCorrectOption ? "Well Done!" : "Pay Attention!"}
+            {selectedOptionObj ? (isCorrectOption ? "Well Done!" : "Pay Attention!") : ""}
           </div>
         </div>
       </div>
